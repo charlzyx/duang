@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+    // enable latest features
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleDetection": "force",
+    "jsx": "react-jsx", // support JSX
+    "allowJs": true, // allow importing `.js` from `.ts`
+
+    // Bundler mode
+    "moduleResolution": "bundler",
+    "noEmit": true,
+
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // Some stricter flags
+    "useUnknownInCatchVariables": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    // workspaces path alias 
+		"baseUrl": ".",
+		"paths": {
+			"@duang/*": ["./packages/*/src"]
+		}
+	}
+}

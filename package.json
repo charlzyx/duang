@@ -1,0 +1,38 @@
+{
+  "name": "workspaces",
+  "private": true,
+  "scripts": {
+    "qi": "pnpm install --prefer-offline ",
+    "clean": "rm -rf pnpm-lock.yaml node_modules packages/*/{node_modules,dist,bun.lockb}",
+    "dev": "npx rsbuild dev",
+    "build": "bun run scripts/build.ts"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.x",
+    "@duang/core": "workspace:*",
+    "@duang/react": "workspace:*",
+    "@duang/settings-form": "workspace:*",
+    "@duang/shared": "workspace:*",
+    "@formily/antd": "^2.3.1",
+    "@formily/core": "^2.3.1",
+    "@formily/json-schema": "^2.3.1",
+    "@formily/react": "^2.3.1",
+    "@formily/reactive": "^2.3.1",
+    "@formily/reactive-react": "^2.3.1",
+    "@formily/shared": "^2.3.1",
+    "@monaco-editor/loader": "^1.4.0",
+    "antd": "^4.24.15",
+    "classnames": "^2.5.1",
+    "react": "^16.9.*",
+    "react-dom": "^16.9.*",
+    "react-is": "^16.9.*"
+  },
+  "devDependencies": {
+    "@rsbuild/core": "^0.3.7",
+    "@rsbuild/plugin-react": "^0.2.18",
+    "@types/react": "^16.9.*",
+    "@types/react-dom": "^16.9.*",
+    "father": "^4.3.8",
+    "typescript": "^5.3.3"
+  }
+}

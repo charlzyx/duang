@@ -1,0 +1,43 @@
+{
+  "name": "@duang/settings-form",
+  "version": "1.0.0-beta.0",
+  "license": "MIT",
+  "main": "./dist/lib",
+  "module": "./dist/esm",
+  "types": "./dist/esm/index.d.ts",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charlzyx/duang.git"
+  },
+  "bugs": {
+    "url": "https://github.com/charlzyx/duang/issues"
+  },
+  "homepage": "https://github.com/charlzyx/duang#readme",
+  "scripts": {
+    "build": "npx father build"
+  },
+  "dependencies": {
+    "@formily/antd": "^2.3.1",
+    "@formily/core": "^2.3.1",
+    "@formily/react": "^2.3.1",
+    "@formily/reactive": "^2.3.1",
+    "@formily/reactive-react": "^2.3.1",
+    "@formily/shared": "^2.3.1",
+    "antd": "^4.24.15",
+    "@babel/parser": "^7.23.6",
+    "@duang/core": "workspace:*",
+    "@duang/react": "workspace:*",
+    "@duang/shared": "workspace:*",
+    "@monaco-editor/react": "^4.6.0",
+    "monaco-editor": "^0.25.2",
+    "prettier": "^2.8.8",
+    "react-color": "^2.19.3",
+    "react-tiny-popover": "^6.0.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
