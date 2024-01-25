@@ -31,36 +31,36 @@ export const ResourceWidget: React.FC<IResourceWidgetProps> = observer(
       const { node, icon, title, thumb, span } = source;
       return (
         <div
-          className={prefix + "-item"}
+          className={`${prefix}-item`}
           style={{ gridColumnStart: `span ${span || 1}` }}
-          key={node.id}
-          data-designer-source-id={node.id}
+          key={node?.id}
+          data-designer-source-id={node?.id}
         >
-          {thumb && <img className={prefix + "-item-thumb"} src={thumb} />}
+          {thumb && <img className={`${prefix}-item-thumb`} src={thumb} />}
           {icon && React.isValidElement(icon) ? (
             <>{icon}</>
           ) : (
             <IconWidget
-              className={prefix + "-item-icon"}
+              className={`${prefix}-item-icon`}
               infer={icon}
               style={{ width: 150, height: 40 }}
             />
           )}
-          <span className={prefix + "-item-text"}>
+          <span className={`${prefix}-item-text`}>
             {
               <TextWidget>
-                {title || node.children[0]?.getMessage("title")}
+                {title || node?.children[0]?.getMessage("title")}
               </TextWidget>
             }
           </span>
         </div>
       );
     };
-    const sources = props.sources.reduce<IResource[]>((buf, source) => {
+    const sources = props.sources!.reduce<IResource[]>((buf, source) => {
       if (isResourceList(source)) {
         return buf.concat(source);
       } else if (isResourceHost(source)) {
-        return buf.concat(source.Resource);
+        return buf.concat(source.Resource!);
       }
       return buf;
     }, []);
@@ -75,26 +75,26 @@ export const ResourceWidget: React.FC<IResourceWidgetProps> = observer(
         })}
       >
         <div
-          className={prefix + "-header"}
+          className={`${prefix}-header`}
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
             setExpand(!expand);
           }}
         >
-          <div className={prefix + "-header-expand"}>
+          <div className={`${prefix}-header-expand`}>
             <IconWidget infer="Expand" size={10} />
           </div>
-          <div className={prefix + "-header-content"}>
+          <div className={`${prefix}-header-content`}>
             <TextWidget>{props.title}</TextWidget>
           </div>
         </div>
-        <div className={prefix + "-content-wrapper"}>
-          <div className={prefix + "-content"}>
+        <div className={`${prefix}-content-wrapper`}>
+          <div className={`${prefix}-content`}>
             {sources.map(isFn(props.children) ? props.children : renderNode)}
             {remainItems ? (
               <div
-                className={prefix + "-item-remain"}
+                className={`${prefix}-item-remain`}
                 style={{ gridColumnStart: `span ${3 - remainItems}` }}
               ></div>
             ) : null}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const FreeMove = (
   <svg viewBox="0 0 1024 1024">
@@ -8,4 +8,4 @@ export const FreeMove = (
       fill="#ffffff"
     ></path>
   </svg>
-)
+);

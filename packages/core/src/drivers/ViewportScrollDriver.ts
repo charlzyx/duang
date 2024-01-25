@@ -3,9 +3,9 @@ import { ViewportScrollEvent } from "../events";
 import { Engine } from "../models/Engine";
 
 export class ViewportScrollDriver extends EventDriver<Engine> {
-  request = null;
+  request: number | null = null;
 
-  onScroll = (e: UIEvent) => {
+  onScroll = (e: Event) => {
     e.preventDefault();
     this.request = globalThisPolyfill.requestAnimationFrame(() => {
       this.dispatch(
@@ -17,10 +17,10 @@ export class ViewportScrollDriver extends EventDriver<Engine> {
           innerHeight: this.contentWindow.innerHeight,
           innerWidth: this.contentWindow.innerWidth,
           view: this.contentWindow,
-          target: e.target,
+          target: e.target!,
         }),
       );
-      cancelAnimationFrame(this.request);
+      cancelAnimationFrame(this.request!);
     });
   };
 

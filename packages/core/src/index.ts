@@ -2,14 +2,18 @@ import * as Core from "./exports";
 export * from "./exports";
 import { globalThisPolyfill } from "@duang/shared";
 
-if (globalThisPolyfill?.["Designable"]?.["Core"]) {
+const AnyGlobal = globalThisPolyfill as any;
+
+if (AnyGlobal?.Designable?.Core) {
+  /** @ts-ignore */
   if (module.exports) {
+    /** @ts-ignore */
     module.exports = {
       __esModule: true,
-      ...globalThisPolyfill["Designable"]["Core"],
+      ...AnyGlobal.Designable.Core,
     };
   }
 } else {
-  globalThisPolyfill["Designable"] = globalThisPolyfill["Designable"] || {};
-  globalThisPolyfill["Designable"].Core = Core;
+  AnyGlobal.Designable = AnyGlobal.Designable || {};
+  AnyGlobal.Designable.Core = Core;
 }

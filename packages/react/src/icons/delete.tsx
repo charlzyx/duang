@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const Delete = (
   <svg>
@@ -15,4 +15,4 @@ export const Delete = (
       p-id="4638"
     ></path>
   </svg>
-)
+);

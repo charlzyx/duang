@@ -26,7 +26,7 @@ export interface ISpaceBlock {
 export type AroundSpaceBlock = Record<ISpaceBlockType, SpaceBlock>;
 
 export class SpaceBlock {
-  _id: string;
+  _id!: string;
   distance: number;
   refer: TreeNode;
   helper: TransformHelper;
@@ -34,10 +34,10 @@ export class SpaceBlock {
   type: ISpaceBlockType;
   constructor(helper: TransformHelper, box: ISpaceBlock) {
     this.helper = helper;
-    this.distance = box.distance;
-    this.refer = box.refer;
-    this.rect = box.rect;
-    this.type = box.type;
+    this.distance = box.distance!;
+    this.refer = box.refer!;
+    this.rect = box.rect!;
+    this.type = box.type!;
   }
 
   get referRect() {
@@ -53,14 +53,14 @@ export class SpaceBlock {
   }
 
   get next() {
-    const spaceBlock = this.helper.calcAroundSpaceBlocks(this.referRect);
+    const spaceBlock = this.helper.calcAroundSpaceBlocks(this.referRect!);
     return spaceBlock[this.type as any];
   }
 
   get extendsLine() {
     if (!this.needExtendsLine) return;
     const dragNodesRect = this.helper.dragNodesRect;
-    return calcExtendsLineSegmentOfRect(dragNodesRect, this.referRect);
+    return calcExtendsLineSegmentOfRect(dragNodesRect, this.referRect!);
   }
 
   get needExtendsLine() {
@@ -79,11 +79,10 @@ export class SpaceBlock {
         topDelta < targetRect.height / 2 || bottomDelta < targetRect.height / 2
       );
     }
-    return true;
   }
 
   get crossReferRect() {
-    const referRect = this.referRect;
+    const referRect = this.referRect!;
     if (this.type === "top" || this.type === "bottom") {
       return new Rect(
         referRect.x,
@@ -123,6 +122,7 @@ export class SpaceBlock {
   get isometrics() {
     const results: SpaceBlock[] = [];
     let spaceBlock: SpaceBlock = this as any;
+    // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
     while ((spaceBlock = spaceBlock.next)) {
       if (
         Math.abs(spaceBlock.distance - this.distance) <
@@ -139,7 +139,7 @@ export class SpaceBlock {
   get snapLine() {
     if (!this.isometrics.length) return;
     const nextRect = this.next.rect;
-    const referRect = this.referRect;
+    const referRect = this.referRect!;
     let line: LineSegment;
     if (this.type === "top") {
       line = new LineSegment(

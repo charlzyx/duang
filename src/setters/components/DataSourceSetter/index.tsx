@@ -69,18 +69,19 @@ export const DataSourceSetter: React.FC<IDataSourceSetterProps> = observer(
           }}
         >
           <div
-            className={`${cls(prefix, className)} ${prefix + "-" + theme} ${
-              prefix + "-layout"
-            }`}
+            className={`${cls(
+              prefix,
+              className,
+            )} ${`${prefix}-${theme}`} ${`${prefix}-layout`}`}
           >
-            <div className={`${prefix + "-layout-item left"}`}>
+            <div className={`${`${prefix}-layout-item left`}`}>
               <TreePanel
-                defaultOptionValue={defaultOptionValue}
+                defaultOptionValue={defaultOptionValue!}
                 allowTree={allowTree}
                 treeDataSource={treeDataSource}
               ></TreePanel>
             </div>
-            <div className={`${prefix + "-layout-item right"}`}>
+            <div className={`${`${prefix}-layout-item right`}`}>
               <DataSettingPanel
                 allowExtendOption={allowExtendOption}
                 treeDataSource={treeDataSource}

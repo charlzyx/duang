@@ -7,7 +7,7 @@ function filter(event: KeyboardEvent) {
   let flag = true;
   // ignore: isContentEditable === 'true', <input> and <textarea> when readOnly state is false, <select>、Web Components
   if (
-    target["isContentEditable"] ||
+    target.isContentEditable ||
     ((tagName === "INPUT" ||
       tagName === "TEXTAREA" ||
       tagName === "SELECT" ||

@@ -57,7 +57,8 @@ import {
   SchemaEditorWidget,
 } from "./widgets";
 
-setNpmCDNRegistry("//unpkg.com");
+// setNpmCDNRegistry("//unpkg.com");
+setNpmCDNRegistry("//npm.elemecdn.com");
 
 GlobalRegistry.registerDesignerLocales({
   "zh-CN": {

@@ -27,17 +27,17 @@ function setEndOfContenteditable(contentEditableElement: Element) {
   const range = document.createRange();
   range.selectNodeContents(contentEditableElement);
   range.collapse(false);
-  const selection = globalThisPolyfill.getSelection();
+  const selection = globalThisPolyfill.getSelection()!;
   selection.removeAllRanges();
   selection.addRange(range);
 }
 
 function createCaretCache(el: Element) {
-  const currentSelection = globalThisPolyfill.getSelection();
+  const currentSelection = globalThisPolyfill.getSelection()!;
   if (currentSelection.containsNode(el)) return;
   const ranges = getAllRanges(currentSelection);
   return (offset = 0) => {
-    const sel = globalThisPolyfill.getSelection();
+    const sel = globalThisPolyfill.getSelection()!;
     const firstNode = el.childNodes[0];
     if (!firstNode) return;
     sel.removeAllRanges();
@@ -66,7 +66,7 @@ export const useContentEditableEffect = (engine: Engine) => {
     }
   }
 
-  function onInputHandler(event: InputEvent) {
+  function onInputHandler(this: HTMLInputElement, event: InputEvent) {
     const node = globalState.activeElements.get(this);
     event.stopPropagation();
     event.preventDefault();
@@ -78,12 +78,12 @@ export const useContentEditableEffect = (engine: Engine) => {
         const restore = createCaretCache(target);
         Path.setIn(
           node.props,
-          this.getAttribute(engine.props.contentEditableAttrName),
+          this.getAttribute(engine.props.contentEditableAttrName!)!,
           target?.textContent,
         );
         requestIdle(() => {
           node.takeSnapshot("update:node:props");
-          restore();
+          restore?.();
         });
       };
       globalState.queue.push(handler);
@@ -103,6 +103,7 @@ export const useContentEditableEffect = (engine: Engine) => {
   function onCompositionHandler(event: CompositionEvent) {
     if (event.type === "compositionend") {
       globalState.isComposition = false;
+      // @ts-ignore
       onInputHandler(event as any);
     } else {
       clearTimeout(globalState.requestTimer);
@@ -110,11 +111,11 @@ export const useContentEditableEffect = (engine: Engine) => {
     }
   }
 
-  function onPastHandler(event: ClipboardEvent) {
+  function onPastHandler(this: HTMLInputElement, event: ClipboardEvent) {
     event.preventDefault();
-    const node = globalState.activeElements.get(this);
-    const text = event.clipboardData.getData("text");
-    const selObj = globalThisPolyfill.getSelection();
+    const node = globalState.activeElements.get(this)!;
+    const text = event.clipboardData!.getData("text");
+    const selObj = globalThisPolyfill.getSelection()!;
     const target = event.target as Element;
     const selRange = selObj.getRangeAt(0);
     const restore = createCaretCache(target);
@@ -122,20 +123,20 @@ export const useContentEditableEffect = (engine: Engine) => {
     selRange.insertNode(document.createTextNode(text));
     Path.setIn(
       node.props,
-      this.getAttribute(engine.props.contentEditableAttrName),
+      this.getAttribute(engine.props.contentEditableAttrName!)!,
       target.textContent,
     );
-    restore(text.length);
+    restore?.(text.length);
   }
 
   function findTargetNodeId(element: Element) {
     if (!element) return;
     const nodeId = element.getAttribute(
-      engine.props.contentEditableNodeIdAttrName,
+      engine.props.contentEditableNodeIdAttrName!,
     );
     if (nodeId) return nodeId;
     const parent = element.closest(`*[${engine.props.nodeIdAttrName}]`);
-    if (parent) return parent.getAttribute(engine.props.nodeIdAttrName);
+    if (parent) return parent.getAttribute(engine.props.nodeIdAttrName!);
   }
 
   engine.subscribeTo(MouseClickEvent, (event) => {
@@ -152,11 +153,11 @@ export const useContentEditableEffect = (engine: Engine) => {
       globalState.activeElements.delete(element);
       element.removeAttribute("contenteditable");
       element.removeAttribute("spellcheck");
-      element.removeEventListener("input", onInputHandler);
+      element.removeEventListener("input", onInputHandler as any);
       element.removeEventListener("compositionstart", onCompositionHandler);
       element.removeEventListener("compositionupdate", onCompositionHandler);
       element.removeEventListener("compositionend", onCompositionHandler);
-      element.removeEventListener("past", onPastHandler);
+      element.removeEventListener("past", onPastHandler as any);
       document.removeEventListener("selectionchange", onSelectionChangeHandler);
     });
   });
@@ -166,7 +167,7 @@ export const useContentEditableEffect = (engine: Engine) => {
     const editableElement = target?.closest?.(
       `*[${engine.props.contentEditableAttrName}]`,
     ) as HTMLInputElement;
-    const workspace = engine.workbench.activeWorkspace;
+    const workspace = engine.workbench.activeWorkspace!;
     const tree = workspace.operation.tree;
     if (editableElement) {
       const editable = editableElement.getAttribute("contenteditable");
@@ -179,7 +180,7 @@ export const useContentEditableEffect = (engine: Engine) => {
             editableElement.setAttribute("spellcheck", "false");
             editableElement.setAttribute("contenteditable", "true");
             editableElement.focus();
-            editableElement.addEventListener("input", onInputHandler);
+            editableElement.addEventListener("input", onInputHandler as any);
             editableElement.addEventListener(
               "compositionstart",
               onCompositionHandler,

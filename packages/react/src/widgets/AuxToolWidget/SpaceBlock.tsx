@@ -14,16 +14,16 @@ export const SpaceBlock = observer(() => {
   const renderRulerBox = (distance: number, type: string) => {
     if (type === "top" || type === "bottom") {
       return (
-        <div className={prefix + "-ruler-v"}>
-          <div className={prefix + "-ruler-indicator"}>
+        <div className={`${prefix}-ruler-v`}>
+          <div className={`${prefix}-ruler-indicator`}>
             <span>{distance?.toFixed(0)}</span>
           </div>
         </div>
       );
     } else if (type === "left" || type === "right") {
       return (
-        <div className={prefix + "-ruler-h"}>
-          <div className={prefix + "-ruler-indicator"}>
+        <div className={`${prefix}-ruler-h`}>
+          <div className={`${prefix}-ruler-indicator`}>
             <span>{distance?.toFixed(0)}</span>
           </div>
         </div>
@@ -38,8 +38,8 @@ export const SpaceBlock = observer(() => {
     const height = rect.height || 2;
     return (
       <svg
-        width={width + "px"}
-        height={height + "px"}
+        width={`${width}px`}
+        height={`${height}px`}
         viewBox={`0 0 ${width} ${height}`}
         style={{
           top: 0,
@@ -68,7 +68,7 @@ export const SpaceBlock = observer(() => {
         ({ type, crossDragNodesRect, distance, extendsLine }, key) => {
           return (
             <Fragment>
-              {renderDashedLine(extendsLine)}
+              {renderDashedLine(extendsLine!)}
               <div
                 key={key}
                 style={{

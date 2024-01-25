@@ -21,13 +21,14 @@ export interface ICompositePanelItemProps {
   href?: string;
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   extra?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-const parseItems = (children: React.ReactNode): ICompositePanelItemProps[] => {
-  const items = [];
-  React.Children.forEach(children, (child, index) => {
-    if (child?.["type"] === CompositePanel.Item) {
-      items.push({ key: child["key"] ?? index, ...child["props"] });
+const parseItems = (children: React.ReactNode) => {
+  const items: ICompositePanelItemProps[] = [];
+  React.Children.forEach(children, (child: any, index) => {
+    if (child?.type === CompositePanel.Item) {
+      items.push({ key: child.key ?? index, ...child.props });
     }
   });
   return items;
@@ -51,9 +52,9 @@ export const CompositePanel: React.FC<ICompositePanelProps> & {
 } = (props) => {
   const prefix = usePrefix("composite-panel");
   const [activeKey, setActiveKey] = useState<string | number>(
-    props.defaultActiveKey ?? getDefaultKey(props.children),
+    props.defaultActiveKey ?? getDefaultKey(props.children)!,
   );
-  const activeKeyRef = useRef(null);
+  const activeKeyRef = useRef<typeof activeKey>();
   const [pinning, setPinning] = useState(props.defaultPinning ?? false);
   const [visible, setVisible] = useState(props.defaultOpen ?? true);
   const items = parseItems(props.children);
@@ -65,7 +66,7 @@ export const CompositePanel: React.FC<ICompositePanelProps> & {
   useEffect(() => {
     if (isValid(props.activeKey)) {
       if (props.activeKey !== activeKeyRef.current) {
-        setActiveKey(props.activeKey);
+        setActiveKey(props.activeKey!);
       }
     }
   }, [props.activeKey]);
@@ -74,22 +75,22 @@ export const CompositePanel: React.FC<ICompositePanelProps> & {
     if (!content || !visible) return;
     return (
       <div
-        className={cls(prefix + "-tabs-content", {
+        className={cls(`${prefix}-tabs-content`, {
           pinning,
         })}
       >
-        <div className={prefix + "-tabs-header"}>
-          <div className={prefix + "-tabs-header-title"}>
+        <div className={`${prefix}-tabs-header`}>
+          <div className={`${prefix}-tabs-header-title`}>
             <TextWidget>{currentItem.title}</TextWidget>
           </div>
-          <div className={prefix + "-tabs-header-actions"}>
-            <div className={prefix + "-tabs-header-extra"}>
+          <div className={`${prefix}-tabs-header-actions`}>
+            <div className={`${prefix}-tabs-header-extra`}>
               {currentItem.extra}
             </div>
             {!pinning && (
               <IconWidget
                 infer="PushPinOutlined"
-                className={prefix + "-tabs-header-pin"}
+                className={`${prefix}-tabs-header-pin`}
                 onClick={() => {
                   setPinning(!pinning);
                 }}
@@ -98,7 +99,7 @@ export const CompositePanel: React.FC<ICompositePanelProps> & {
             {pinning && (
               <IconWidget
                 infer="PushPinFilled"
-                className={prefix + "-tabs-header-pin-filled"}
+                className={`${prefix}-tabs-header-pin-filled`}
                 onClick={() => {
                   setPinning(!pinning);
                 }}
@@ -106,14 +107,14 @@ export const CompositePanel: React.FC<ICompositePanelProps> & {
             )}
             <IconWidget
               infer="Close"
-              className={prefix + "-tabs-header-close"}
+              className={`${prefix}-tabs-header-close`}
               onClick={() => {
                 setVisible(false);
               }}
             />
           </div>
         </div>
-        <div className={prefix + "-tabs-body"}>{content}</div>
+        <div className={`${prefix}-tabs-body`}>{content}</div>
       </div>
     );
   };
@@ -124,7 +125,7 @@ export const CompositePanel: React.FC<ICompositePanelProps> & {
         [`direction-${props.direction}`]: !!props.direction,
       })}
     >
-      <div className={prefix + "-tabs"}>
+      <div className={`${prefix}-tabs`}>
         {items.map((item, index) => {
           const takeTab = () => {
             if (item.href) {
@@ -149,9 +150,10 @@ export const CompositePanel: React.FC<ICompositePanelProps> & {
           const Comp = shape === "link" ? "a" : "div";
           return (
             <Comp
-              className={cls(prefix + "-tabs-pane", {
+              className={cls(`${prefix}-tabs-pane`, {
                 active: activeKey === item.key,
               })}
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
               key={index}
               href={item.href}
               onClick={(e: any) => {
@@ -162,15 +164,15 @@ export const CompositePanel: React.FC<ICompositePanelProps> & {
                     setVisible(true);
                   }
                   if (!props?.activeKey || !props?.onChange)
-                    setActiveKey(item.key);
+                    setActiveKey(item.key!);
                 }
                 item.onClick?.(e);
-                props.onChange?.(item.key);
+                props.onChange?.(item.key!);
               }}
             >
               {takeTab()}
               {props.showNavTitle && item.title ? (
-                <div className={prefix + "-tabs-pane-title"}>
+                <div className={`${prefix}-tabs-pane-title`}>
                   <TextWidget>{item.title}</TextWidget>
                 </div>
               ) : null}

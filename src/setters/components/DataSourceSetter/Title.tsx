@@ -11,9 +11,9 @@ export interface ITitleProps extends INodeItem {
 
 export const Title: React.FC<ITitleProps> = observer((props) => {
   const prefix = usePrefix("data-source-setter-node-title");
-  const getTitleValue = (dataSource) => {
+  const getTitleValue = (dataSource: INodeItem[]) => {
     const optionalKeys = ["label", "title", "header"];
-    let nodeTitle: string;
+    let nodeTitle: string = undefined!;
     optionalKeys.some((key) => {
       const title = toArr(dataSource).find((item) => item.label === key)?.value;
       if (title !== undefined) {
@@ -34,22 +34,22 @@ export const Title: React.FC<ITitleProps> = observer((props) => {
     return nodeTitle;
   };
 
-  const renderTitle = (dataSource) => {
+  const renderTitle = (dataSource: INodeItem[]) => {
     const nodeTitle = getTitleValue(dataSource);
     if (nodeTitle === undefined)
       return (
         <TextWidget token="SettingComponents.DataSourceSetter.defaultTitle" />
       );
-    else return nodeTitle + "";
+    else return `${nodeTitle}`;
   };
 
   return (
     <div className={prefix}>
       <span style={{ marginRight: "5px" }}>
-        {renderTitle(props?.map || [])}
+        {renderTitle(props?.map || ([] as any[]))}
       </span>
       <IconWidget
-        className={prefix + "-icon"}
+        className={`${prefix}-icon`}
         infer="Remove"
         onClick={() => {
           const newDataSource = clone(props?.treeDataSource?.dataSource);

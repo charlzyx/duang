@@ -4,27 +4,24 @@ import { Engine } from "../models/Engine";
 
 const GlobalState = {
   dragging: false,
-  onMouseDownAt: 0,
-  startEvent: null,
-  moveEvent: null,
+  onMouseDownAt: 0 as number | null,
+  startEvent: null as null | DragEvent | MouseEvent,
+  moveEvent: null as null | DragEvent | MouseEvent,
 };
 
 export class DragDropDriver extends EventDriver<Engine> {
   mouseDownTimer = null;
 
-  startEvent: MouseEvent;
+  startEvent!: MouseEvent;
 
-  onMouseDown = (e: MouseEvent) => {
+  onMouseDown = (e: any) => {
     if (e.button !== 0 || e.ctrlKey || e.metaKey) {
       return;
     }
-    if (
-      e.target["isContentEditable"] ||
-      e.target["contentEditable"] === "true"
-    ) {
+    if (e.target?.isContentEditable || e.target?.contentEditable === "true") {
       return true;
     }
-    if (e.target?.["closest"]?.(".monaco-editor")) return;
+    if (e.target?.closest?.(".monaco-editor")) return;
     GlobalState.startEvent = e;
     GlobalState.dragging = false;
     GlobalState.onMouseDownAt = Date.now();
@@ -42,8 +39,8 @@ export class DragDropDriver extends EventDriver<Engine> {
           clientY: e.clientY,
           pageX: e.pageX,
           pageY: e.pageY,
-          target: e.target,
-          view: e.view,
+          target: e.target!,
+          view: e.view!,
         }),
       );
     }
@@ -72,8 +69,8 @@ export class DragDropDriver extends EventDriver<Engine> {
         clientY: e.clientY,
         pageX: e.pageX,
         pageY: e.pageY,
-        target: e.target,
-        view: e.view,
+        target: e.target!,
+        view: e.view!,
       }),
     );
     GlobalState.moveEvent = e;
@@ -99,8 +96,8 @@ export class DragDropDriver extends EventDriver<Engine> {
         clientY: GlobalState.startEvent.clientY,
         pageX: GlobalState.startEvent.pageX,
         pageY: GlobalState.startEvent.pageY,
-        target: GlobalState.startEvent.target,
-        view: GlobalState.startEvent.view,
+        target: GlobalState.startEvent.target!,
+        view: GlobalState.startEvent.view!,
       }),
     );
     GlobalState.dragging = true;
@@ -108,10 +105,10 @@ export class DragDropDriver extends EventDriver<Engine> {
 
   onDistanceChange = (e: MouseEvent) => {
     const distance = Math.sqrt(
-      Math.pow(e.pageX - GlobalState.startEvent.pageX, 2) +
-        Math.pow(e.pageY - GlobalState.startEvent.pageY, 2),
+      Math.pow(e.pageX - GlobalState.startEvent?.pageX!, 2) +
+        Math.pow(e.pageY - GlobalState.startEvent?.pageY!, 2),
     );
-    const timeDelta = Date.now() - GlobalState.onMouseDownAt;
+    const timeDelta = Date.now() - GlobalState.onMouseDownAt!;
     if (timeDelta > 10 && e !== GlobalState.startEvent && distance > 4) {
       this.batchRemoveEventListener("mousemove", this.onDistanceChange);
       this.onStartDrag(e);

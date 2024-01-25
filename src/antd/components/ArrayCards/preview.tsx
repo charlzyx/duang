@@ -6,7 +6,7 @@ import {
   useNodeIdProps,
   useTreeNode,
 } from "@duang/react";
-import { ArrayBase } from "@formily/antd";
+import { ArrayBase as AntdArrayBase } from "@formily/antd";
 import { observer } from "@formily/react";
 import { Card, CardProps } from "antd";
 import cls from "classnames";
@@ -22,6 +22,9 @@ import {
 } from "../../shared";
 import { createArrayBehavior } from "../ArrayBase";
 import "./styles.less";
+
+const ArrayBase = AntdArrayBase as Required<typeof AntdArrayBase> &
+  typeof AntdArrayBase;
 
 const ensureObjectItemsNode = createEnsureTypeItemsNode("object");
 
@@ -106,7 +109,7 @@ export const ArrayCards: DnFC<CardProps> = observer((props) => {
     ]);
     return (
       <ArrayBase disabled>
-        <ArrayBase.Item index={0} record={null}>
+        <ArrayBase.Item index={0} record={null!}>
           <Card
             {...props}
             title={
@@ -264,7 +267,7 @@ ArrayCards.Resource = createResource({
         "x-decorator": "FormItem",
         "x-component": "ArrayCards",
         "x-component-props": {
-          title: `Title`,
+          title: "Title",
         },
       },
     },

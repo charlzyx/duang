@@ -14,7 +14,7 @@ export const SnapLine = observer(() => {
       height: rect.height || 1,
       width: rect.width || 1,
       transform: `perspective(1px) translate3d(${rect.x}px,${rect.y}px,0)`,
-      background: `#b0b1f3`,
+      background: "#b0b1f3",
       position: "absolute",
       zIndex: 2,
     };
@@ -27,9 +27,10 @@ export const SnapLine = observer(() => {
         if (line.type !== "normal") return null;
         return (
           <div
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
             key={key}
             className={prefix}
-            style={createLineStyle(line.rect)}
+            style={createLineStyle(line.rect as any)}
           ></div>
         );
       })}

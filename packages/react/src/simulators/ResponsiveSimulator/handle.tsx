@@ -17,7 +17,7 @@ export const ResizeHandle: React.FC<IResizeHandleProps> = (props) => {
   return (
     <div
       {...props}
-      {...{ [designer.props.screenResizeHandlerAttrName]: props.type }}
+      {...{ [designer.props.screenResizeHandlerAttrName!]: props.type }}
       className={cls(prefix, {
         [`${prefix}-${props.type}`]: !!props.type,
       })}

@@ -16,8 +16,8 @@ export class MouseClickDriver extends EventDriver<Engine> {
         clientY: e.clientY,
         pageX: e.pageX,
         pageY: e.pageY,
-        target: e.target,
-        view: e.view,
+        target: e.target!,
+        view: e.view!,
       }),
     );
   };
@@ -35,8 +35,8 @@ export class MouseClickDriver extends EventDriver<Engine> {
         clientY: e.clientY,
         pageX: e.pageX,
         pageY: e.pageY,
-        target: e.target,
-        view: e.view,
+        target: e.target!,
+        view: e.view!,
       }),
     );
   };

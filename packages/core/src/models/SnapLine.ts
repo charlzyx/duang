@@ -28,11 +28,11 @@ export class SnapLine {
   constructor(helper: TransformHelper, line: ISnapLine) {
     this.helper = helper;
     this.type = line.type || "normal";
-    this._id = line.id;
-    this.refer = line.refer;
+    this._id = line.id!;
+    this.refer = line.refer!;
     this.start = { ...line.start };
     this.end = { ...line.end };
-    this.distance = line.distance;
+    this.distance = line.distance!;
   }
 
   get id() {
@@ -73,7 +73,7 @@ export class SnapLine {
     const dragNodeRect = node.getValidElementOffsetRect();
     const parentRect = parent.getValidElementOffsetRect();
     const edgeOffset = calcOffsetOfSnapLineSegmentToEdge(this, dragNodeRect);
-    const cursorRect = this.helper.cursorDragNodesRect;
+    const cursorRect = this.helper.cursorDragNodesRect!;
     const snapEdge = this.snapEdge(rect);
     if (this.direction === "h") {
       const y = this.start.y - parentRect.y - edgeOffset.y;

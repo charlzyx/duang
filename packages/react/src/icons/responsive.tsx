@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const Responsive = (
   <svg viewBox="0 0 1200 1024">
@@ -15,4 +15,4 @@ export const Responsive = (
       p-id="2494"
     ></path>
   </svg>
-)
+);

@@ -13,7 +13,7 @@ export const MobileSimulator: React.FC<IMobileSimulatorProps> = (props) => {
   const prefix = usePrefix("mobile-simulator");
   return (
     <div {...props} className={cls(prefix, props.className)}>
-      <div className={prefix + "-content"}>
+      <div className={`${prefix}-content`}>
         <MobileBody>{props.children}</MobileBody>
       </div>
     </div>

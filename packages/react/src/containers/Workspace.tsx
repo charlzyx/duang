@@ -32,7 +32,7 @@ export const Workspace: React.FC<IWorkspaceProps> = ({
   }, [id, designer]);
   return (
     <Fragment>
-      <WorkspaceContext.Provider value={workspace}>
+      <WorkspaceContext.Provider value={workspace!}>
         {props.children}
       </WorkspaceContext.Provider>
     </Fragment>

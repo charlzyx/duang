@@ -39,7 +39,7 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
         buf[key] = value;
         return buf;
       },
-      {},
+      {} as any,
     );
   };
 
@@ -83,8 +83,8 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
           );
         })}
       </Menu>
-      <div className={prefix + "-coder-wrapper"}>
-        <div className={prefix + "-coder-start"}>
+      <div className={`${prefix}-coder-wrapper`}>
+        <div className={`${prefix}-coder-start`}>
           {`$self.${selectKeys[0]} = (`}
           <span
             style={{
@@ -101,12 +101,12 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
             {"`"}
           </span>
         </div>
-        <div className={prefix + "-coder"}>
+        <div className={`${prefix}-coder`}>
           <MonacoInput
             key={selectKeys[0]}
             language="javascript.expression"
             extraLib={props.extraLib}
-            helpCode={template(currentProperty?.helpCode)}
+            helpCode={template(currentProperty?.helpCode!)}
             value={parseExpression(value[selectKeys[0]])}
             options={{
               lineNumbers: "off",
@@ -129,7 +129,7 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
             }}
           />
         </div>
-        <div className={prefix + "-coder-end"}>{`)`}</div>
+        <div className={`${prefix}-coder-end`}>{")"}</div>
       </div>
     </div>
   );

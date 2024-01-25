@@ -11,8 +11,8 @@ export interface IHeaderProps {
 export const Header: React.FC<IHeaderProps> = observer(({ extra, title }) => {
   const prefix = usePrefix("data-source-setter");
   return (
-    <div className={`${prefix + "-layout-item-header"}`}>
-      <div className={`${prefix + "-layout-item-title"}`}>{title}</div>
+    <div className={`${`${prefix}-layout-item-header`}`}>
+      <div className={`${`${prefix}-layout-item-title`}`}>{title}</div>
       {extra}
     </div>
   );

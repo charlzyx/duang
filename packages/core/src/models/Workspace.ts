@@ -50,7 +50,8 @@ export class Workspace {
 
   props: IWorkspaceProps;
 
-  constructor(engine: Engine, props: IWorkspaceProps) {
+  constructor(engine: Engine, _props: IWorkspaceProps) {
+    const props = _props as Required<typeof _props>;
     this.engine = engine;
     this.props = props;
     this.id = props.id || uid();
@@ -61,7 +62,7 @@ export class Workspace {
       workspace: this,
       viewportElement: props.viewportElement,
       contentWindow: props.contentWindow,
-      nodeIdAttrName: this.engine.props.nodeIdAttrName,
+      nodeIdAttrName: this.engine.props.nodeIdAttrName!,
       moveSensitive: true,
       moveInsertionType: "all",
     });
@@ -70,12 +71,13 @@ export class Workspace {
       workspace: this,
       viewportElement: props.viewportElement,
       contentWindow: props.contentWindow,
-      nodeIdAttrName: this.engine.props.outlineNodeIdAttrName,
+      nodeIdAttrName: this.engine.props.outlineNodeIdAttrName!,
       moveSensitive: false,
       moveInsertionType: "block",
     });
     this.operation = new Operation(this);
-    this.history = new History(this, {
+
+    this.history = new History(this as Workspace, {
       onPush: (item) => {
         this.operation.dispatch(new HistoryPushEvent(item));
       },

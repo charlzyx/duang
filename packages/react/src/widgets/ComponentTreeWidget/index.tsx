@@ -20,7 +20,7 @@ export interface ITreeNodeWidgetProps {
 
 export const TreeNodeWidget: React.FC<ITreeNodeWidgetProps> = observer(
   (props: ITreeNodeWidgetProps) => {
-    const designer = useDesigner(props.node?.designerProps?.effects);
+    const designer = useDesigner(props.node?.designerProps?.["effects"]);
     const components = useComponents();
     const node = props.node;
     const renderChildren = () => {
@@ -37,6 +37,7 @@ export const TreeNodeWidget: React.FC<ITreeNodeWidgetProps> = observer(
         ...node.designerProps?.getComponentProps?.(node),
       };
       if (node.depth === 0) {
+        // biome-ignore lint/performance/noDelete: <explanation>
         delete props.style;
       }
       return props;
@@ -44,10 +45,10 @@ export const TreeNodeWidget: React.FC<ITreeNodeWidgetProps> = observer(
     const renderComponent = () => {
       const componentName = node.componentName;
       const Component = components[componentName];
-      const dataId = {};
+      const dataId = {} as Record<string, any>;
       if (Component) {
         if (designer) {
-          dataId[designer?.props?.nodeIdAttrName] = node.id;
+          dataId[designer?.props?.nodeIdAttrName!] = node.id;
         }
         return React.createElement(
           Component,
@@ -56,6 +57,7 @@ export const TreeNodeWidget: React.FC<ITreeNodeWidgetProps> = observer(
         );
       } else {
         if (node?.children?.length) {
+          // biome-ignore lint/complexity/noUselessFragments: <explanation>
           return <Fragment>{renderChildren()}</Fragment>;
         }
       }
@@ -76,16 +78,16 @@ export const ComponentTreeWidget: React.FC<IComponentTreeWidgetProps> =
     const tree = useTree();
     const prefix = usePrefix("component-tree");
     const designer = useDesigner();
-    const dataId = {};
+    const dataId = {} as Record<string, any>;
     if (designer && tree) {
-      dataId[designer?.props?.nodeIdAttrName] = tree.id;
+      dataId[designer?.props?.nodeIdAttrName!] = tree.id;
     }
     useEffect(() => {
       GlobalRegistry.registerDesignerBehaviors(props.components);
     }, []);
     return (
       <div
-        style={{ ...props.style, ...tree?.props?.style }}
+        style={{ ...props.style, ...tree?.props?.["style"] }}
         className={cls(prefix, props.className)}
         {...dataId}
       >

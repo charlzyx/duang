@@ -20,18 +20,18 @@
     "build": "npx father build"
   },
   "dependencies": {
+    "@babel/parser": "^7.23.6",
+    "@duang/core": "workspace:*",
+    "@duang/react": "workspace:*",
+    "@duang/shared": "workspace:*",
     "@formily/antd": "^2.3.1",
     "@formily/core": "^2.3.1",
     "@formily/react": "^2.3.1",
     "@formily/reactive": "^2.3.1",
     "@formily/reactive-react": "^2.3.1",
     "@formily/shared": "^2.3.1",
-    "antd": "^4.24.15",
-    "@babel/parser": "^7.23.6",
-    "@duang/core": "workspace:*",
-    "@duang/react": "workspace:*",
-    "@duang/shared": "workspace:*",
     "@monaco-editor/react": "^4.6.0",
+    "antd": "^4.24.15",
     "monaco-editor": "^0.25.2",
     "prettier": "^2.8.8",
     "react-color": "^2.19.3",
@@ -39,5 +39,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@types/react-color": "^3.0.11"
   }
 }

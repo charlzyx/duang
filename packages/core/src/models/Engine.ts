@@ -15,16 +15,16 @@ export class Engine extends Event {
 
   props: IEngineProps<Engine>;
 
-  cursor: Cursor;
+  cursor!: Cursor;
 
-  workbench: Workbench;
+  workbench!: Workbench;
 
-  keyboard: Keyboard;
+  keyboard!: Keyboard;
 
-  screen: Screen;
+  screen!: Screen;
 
   constructor(props: IEngineProps<Engine>) {
-    super(props);
+    super(props as any);
     this.props = {
       ...Engine.defaultProps,
       ...props,
@@ -64,7 +64,7 @@ export class Engine extends Event {
   }
 
   findMovingNodes(): TreeNode[] {
-    const results = [];
+    const results: TreeNode[] = [];
     this.workbench.eachWorkspace((workspace) => {
       workspace.operation.moveHelper.dragNodes?.forEach((node) => {
         if (!results.includes(node)) {

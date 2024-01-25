@@ -9,12 +9,13 @@ export const mergeLocales = (target: any, source: any) => {
   if (isPlainObj(target) && isPlainObj(source)) {
     each(source, (value, key) => {
       const token = lowerSnake(key);
-      const messages = mergeLocales(target[key] || target[token], value);
-      target[token] = messages;
+      const t = target as any;
+      const messages = mergeLocales(t[key] || t[token], value);
+      t[token] = messages;
     });
     return target;
   } else if (isPlainObj(source)) {
-    const result = Array.isArray(source) ? [] : {};
+    const result = Array.isArray(source) ? [] : ({} as any);
     each(source, (value, key) => {
       const messages = mergeLocales(undefined, value);
       result[lowerSnake(key)] = messages;
@@ -30,7 +31,8 @@ export const getBrowserLanguage = () => {
     return "en";
   }
   return (
-    globalThisPolyfill.navigator["browserlanguage"] ||
+    /** @ts-ignore */
+    globalThisPolyfill.navigator.browserlanguage ||
     globalThisPolyfill.navigator?.language ||
     "en"
   );

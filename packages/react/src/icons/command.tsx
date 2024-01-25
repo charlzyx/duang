@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const Command = (
   <svg>
@@ -11,4 +11,4 @@ export const Command = (
       p-id="5443"
     ></path>
   </svg>
-)
+);

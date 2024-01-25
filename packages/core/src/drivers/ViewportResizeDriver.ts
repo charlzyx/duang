@@ -5,14 +5,14 @@ import { ViewportResizeEvent } from "../events";
 import { Engine } from "../models/Engine";
 
 export class ViewportResizeDriver extends EventDriver<Engine> {
-  request = null;
+  request: number | null = null;
 
-  resizeObserver: ResizeObserver = null;
+  resizeObserver: ResizeObserver = null as unknown as ResizeObserver;
 
   onResize = (e: any) => {
     if (e.preventDefault) e.preventDefault();
     this.request = requestAnimationFrame(() => {
-      cancelAnimationFrame(this.request);
+      cancelAnimationFrame(this.request!);
       this.dispatch(
         new ViewportResizeEvent({
           scrollX: this.contentWindow.scrollX,

@@ -12,17 +12,17 @@ const useMouseHover = <T extends { current: HTMLElement }>(
   leave?: () => void,
 ) => {
   useEffect(() => {
-    let timer = null;
+    let timer: number | null = null;
     let unmounted = false;
     const onMouseOver = (e: MouseEvent) => {
       const target: HTMLElement = e.target as any;
-      clearTimeout(timer);
+      clearTimeout(timer!);
       timer = setTimeout(() => {
         if (unmounted) return;
         if (ref?.current?.contains(target)) {
-          enter && enter();
+          enter?.();
         } else {
-          leave && leave();
+          leave?.();
         }
       }, 100);
     };
@@ -63,7 +63,7 @@ export const Selector: React.FC<ISelectorProps> = observer(({ node }) => {
     const parents = node.getParents();
     return (
       <div
-        className={prefix + "-menu"}
+        className={`${prefix}-menu`}
         style={{
           position: "absolute",
           top: "100%",
@@ -94,7 +94,7 @@ export const Selector: React.FC<ISelectorProps> = observer(({ node }) => {
   };
 
   useMouseHover(
-    ref,
+    ref as any,
     () => {
       setExpand(true);
     },
@@ -106,7 +106,7 @@ export const Selector: React.FC<ISelectorProps> = observer(({ node }) => {
   return (
     <div ref={ref} className={prefix}>
       <Button
-        className={prefix + "-title"}
+        className={`${prefix}-title`}
         type="primary"
         onMouseEnter={() => {
           hover.setHover(node);

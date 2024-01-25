@@ -28,7 +28,7 @@ export class Operation {
   moveHelper: MoveHelper;
 
   requests = {
-    snapshot: null,
+    snapshot: null as number | null,
   };
 
   constructor(workspace: Workspace) {
@@ -54,13 +54,13 @@ export class Operation {
     this.selection.select(this.tree);
   }
 
-  dispatch(event: ICustomEvent, callback?: () => void) {
+  dispatch(event: ICustomEvent, callback?: () => any) {
     if (this.workspace.dispatch(event) === false) return;
     if (isFn(callback)) return callback();
   }
 
   snapshot(type?: string) {
-    cancelIdle(this.requests.snapshot);
+    cancelIdle(this.requests.snapshot!);
     if (
       !this.workspace ||
       !this.workspace.history ||

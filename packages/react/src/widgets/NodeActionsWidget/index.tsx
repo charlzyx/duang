@@ -22,23 +22,25 @@ export interface INodeActionsWidgetActionProps
   icon?: React.ReactNode;
 }
 
-export const NodeActionsWidget: React.FC<INodeActionsWidgetProps> & {
-  Action?: React.FC<INodeActionsWidgetActionProps>;
-} = observer((props) => {
-  const node = useTreeNode();
-  const prefix = usePrefix("node-actions");
-  const selected = useSelected();
-  if (selected.indexOf(node.id) === -1 && props.activeShown) return null;
-  return (
-    <div className={cls(prefix, props.className)} style={props.style}>
-      <div className={prefix + "-content"}>
-        <Space split={<Divider type="vertical" />}>{props.children}</Space>
+export const OriginNodeActionsWidget: React.FC<INodeActionsWidgetProps> =
+  observer((props) => {
+    const node = useTreeNode();
+    const prefix = usePrefix("node-actions");
+    const selected = useSelected();
+    if (selected.indexOf(node.id) === -1 && props.activeShown) return null;
+    return (
+      <div className={cls(prefix, props.className)} style={props.style}>
+        <div className={`${prefix}-content`}>
+          <Space split={<Divider type="vertical" />}>{props.children}</Space>
+        </div>
       </div>
-    </div>
-  );
-});
-
-NodeActionsWidget.Action = ({ icon, title, ...props }) => {
+    );
+  });
+const Action: React.FC<INodeActionsWidgetActionProps> = ({
+  icon,
+  title,
+  ...props
+}) => {
   const prefix = usePrefix("node-actions-item");
   return (
     <Typography.Link
@@ -46,10 +48,14 @@ NodeActionsWidget.Action = ({ icon, title, ...props }) => {
       className={cls(props.className, prefix)}
       data-click-stop-propagation="true"
     >
-      <span className={prefix + "-text"}>
+      <span className={`${prefix}-text`}>
         <IconWidget infer={icon} />
         <TextWidget>{title}</TextWidget>
       </span>
     </Typography.Link>
   );
 };
+
+export const NodeActionsWidget = Object.assign(OriginNodeActionsWidget, {
+  Action,
+});

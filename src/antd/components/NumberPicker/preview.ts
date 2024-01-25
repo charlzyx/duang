@@ -13,7 +13,7 @@ export const NumberPicker: DnFC<
 NumberPicker.Behavior = createBehavior({
   name: "NumberPicker",
   extends: ["Field"],
-  selector: (node) => node.props["x-component"] === "NumberPicker",
+  selector: (node) => node.props?.["x-component"] === "NumberPicker",
   designerProps: {
     propsSchema: createFieldSchema(AllSchemas.NumberPicker),
   },

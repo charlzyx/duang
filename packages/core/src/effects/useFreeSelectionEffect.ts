@@ -15,19 +15,19 @@ export const useFreeSelectionEffect = (engine: Engine) => {
     engine.workbench.eachWorkspace((workspace) => {
       const viewport = workspace.viewport;
       const dragEndPoint = new Point(
-        event.data.topClientX,
-        event.data.topClientY,
+        event.data.topClientX!,
+        event.data.topClientY!,
       );
       const dragStartOffsetPoint = viewport.getOffsetPoint(
         new Point(
-          engine.cursor.dragStartPosition.topClientX,
-          engine.cursor.dragStartPosition.topClientY,
+          engine.cursor.dragStartPosition?.topClientX!,
+          engine.cursor.dragStartPosition?.topClientY!,
         ),
       );
       const dragEndOffsetPoint = viewport.getOffsetPoint(
         new Point(
-          engine.cursor.position.topClientX,
-          engine.cursor.position.topClientY,
+          engine.cursor.position.topClientX!,
+          engine.cursor.position.topClientY!,
         ),
       );
       if (!viewport.isPointInViewport(dragEndPoint, false)) return;
@@ -42,7 +42,7 @@ export const useFreeSelectionEffect = (engine: Engine) => {
       tree.eachChildren((node) => {
         const nodeRect = viewport.getValidNodeOffsetRect(node);
         if (nodeRect && isCrossRectInRect(selectionRect, nodeRect)) {
-          selected.push([node, nodeRect]);
+          selected.push([node, nodeRect as any]);
         }
       });
       const selectedNodes: TreeNode[] = selected.reduce(
@@ -54,7 +54,7 @@ export const useFreeSelectionEffect = (engine: Engine) => {
           }
           return buf.concat(node);
         },
-        [],
+        [] as TreeNode[],
       );
       workspace.operation.selection.batchSafeSelect(selectedNodes);
     });

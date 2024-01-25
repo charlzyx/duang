@@ -13,7 +13,7 @@ export const FormLayout: DnFC<React.ComponentProps<typeof FormilyFormLayout>> =
 FormLayout.Behavior = createBehavior({
   name: "FormLayout",
   extends: ["Field"],
-  selector: (node) => node.props["x-component"] === "FormLayout",
+  selector: (node) => node.props?.["x-component"] === "FormLayout",
   designerProps: {
     droppable: true,
     propsSchema: createVoidFieldSchema(AllSchemas.FormLayout),

@@ -55,7 +55,7 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
             }
             extra={null}
           />
-          <div className={`${prefix + "-layout-item-content"}`}>
+          <div className={`${`${prefix}-layout-item-content`}`}>
             <TextWidget token="SettingComponents.DataSourceSetter.pleaseSelectNode" />
           </div>
         </Fragment>
@@ -82,7 +82,7 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
             ) : null
           }
         />
-        <div className={`${prefix + "-layout-item-content"}`}>
+        <div className={`${`${prefix}-layout-item-content`}`}>
           <Form form={form} labelWidth={60} wrapperWidth={160}>
             <SchemaField>
               <SchemaField.Array name="map" x-component="ArrayItems">

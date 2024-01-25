@@ -41,7 +41,7 @@ export const FormCollapse: DnFC<CollapseProps> & {
         type: "void",
         "x-component": "FormCollapse.CollapsePanel",
         "x-component-props": {
-          header: `Unnamed Title`,
+          header: "Unnamed Title",
         },
       },
       children: source,
@@ -56,7 +56,7 @@ export const FormCollapse: DnFC<CollapseProps> & {
     return (
       <Collapse {...props} activeKey={panels.map((tab) => tab.id)}>
         {panels.map((panel) => {
-          const props = panel.props["x-component-props"] || {};
+          const props = panel.props?.["x-component-props"] || {};
           return (
             <Collapse.Panel
               {...props}
@@ -74,7 +74,7 @@ export const FormCollapse: DnFC<CollapseProps> & {
               {React.createElement(
                 "div",
                 {
-                  [designer.props.nodeIdAttrName]: panel.id,
+                  [designer.props.nodeIdAttrName!]: panel.id,
                   style: {
                     padding: "20px 0",
                   },
@@ -106,7 +106,7 @@ export const FormCollapse: DnFC<CollapseProps> & {
                   type: "void",
                   "x-component": "FormCollapse.CollapsePanel",
                   "x-component-props": {
-                    header: `Unnamed Title`,
+                    header: "Unnamed Title",
                   },
                 },
               });
@@ -129,13 +129,14 @@ FormCollapse.Behavior = createBehavior(
   {
     name: "FormCollapse",
     extends: ["Field"],
-    selector: (node) => node.props["x-component"] === "FormCollapse",
+    selector: (node) => node.props?.["x-component"] === "FormCollapse",
     designerProps: {
       droppable: true,
       allowAppend: (target, source) =>
         target.children.length === 0 ||
-        source.every(
-          (node) => node.props["x-component"] === "FormCollapse.CollapsePanel",
+        source!.every(
+          (node) =>
+            node.props?.["x-component"] === "FormCollapse.CollapsePanel",
         ),
       propsSchema: createVoidFieldSchema(AllSchemas.FormCollapse),
     },
@@ -145,10 +146,10 @@ FormCollapse.Behavior = createBehavior(
     name: "FormCollapse.CollapsePanel",
     extends: ["Field"],
     selector: (node) =>
-      node.props["x-component"] === "FormCollapse.CollapsePanel",
+      node.props?.["x-component"] === "FormCollapse.CollapsePanel",
     designerProps: {
       droppable: true,
-      allowDrop: (node) => node.props["x-component"] === "FormCollapse",
+      allowDrop: (node) => node.props?.["x-component"] === "FormCollapse",
       propsSchema: createVoidFieldSchema(AllSchemas.FormCollapse.CollapsePanel),
     },
     designerLocales: AllLocales.FormCollapsePanel,

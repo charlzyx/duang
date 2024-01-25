@@ -47,7 +47,7 @@ export class Viewport {
 
   viewportElement: HTMLElement;
 
-  dragStartSnapshot: IViewportData;
+  dragStartSnapshot?: IViewportData;
 
   scrollX = 0;
 
@@ -59,7 +59,7 @@ export class Viewport {
 
   mounted = false;
 
-  attachRequest: number;
+  attachRequest?: number;
 
   nodeIdAttrName: string;
 
@@ -145,7 +145,7 @@ export class Viewport {
 
   get innerRect() {
     const rect = this.rect;
-    return new Rect(0, 0, rect?.width, rect?.height);
+    return new Rect(0, 0, rect?.width!, rect?.height!);
   }
 
   get offsetX() {
@@ -169,21 +169,21 @@ export class Viewport {
   }
 
   get dragScrollXDelta() {
-    return this.scrollX - this.dragStartSnapshot.scrollX;
+    return this.scrollX - this.dragStartSnapshot!.scrollX!;
   }
 
   get dragScrollYDelta() {
-    return this.scrollY - this.dragStartSnapshot.scrollY;
+    return this.scrollY - this.dragStartSnapshot!.scrollY!;
   }
 
   cacheElements() {
     this.nodeElementsStore = {};
     this.viewportRoot
       ?.querySelectorAll(`*[${this.nodeIdAttrName}]`)
-      .forEach((element: HTMLElement) => {
-        const id = element.getAttribute(this.nodeIdAttrName);
+      .forEach((element) => {
+        const id = element.getAttribute(this.nodeIdAttrName)!;
         this.nodeElementsStore[id] = this.nodeElementsStore[id] || [];
-        this.nodeElementsStore[id].push(element);
+        this.nodeElementsStore[id].push(element as HTMLElement);
       });
   }
 
@@ -217,7 +217,7 @@ export class Viewport {
 
   elementFromPoint(point: IPoint) {
     if (this.contentWindow?.document) {
-      return this.contentWindow.document.elementFromPoint(point.x, point.y);
+      return this.contentWindow.document.elementFromPoint(point.x, point.y)!;
     }
   }
 
@@ -237,7 +237,7 @@ export class Viewport {
 
   attachEvents() {
     const engine = this.engine;
-    cancelIdle(this.attachRequest);
+    cancelIdle(this.attachRequest!);
     this.attachRequest = requestIdle(() => {
       if (!engine) return;
       if (this.isIframe) {
@@ -272,7 +272,7 @@ export class Viewport {
 
   isPointInViewport(point: IPoint, sensitive?: boolean) {
     if (!this.rect) return false;
-    if (!this.containsElement(document.elementFromPoint(point.x, point.y))) {
+    if (!this.containsElement(document.elementFromPoint(point.x, point.y)!)) {
       return false;
     }
     return isPointInRect(point, this.rect, sensitive);
@@ -280,7 +280,7 @@ export class Viewport {
 
   isRectInViewport(rect: IRect) {
     if (!this.rect) return false;
-    if (!this.containsElement(document.elementFromPoint(rect.x, rect.y))) {
+    if (!this.containsElement(document.elementFromPoint(rect.x, rect.y)!)) {
       return false;
     }
     return isRectInRect(rect, this.rect);
@@ -293,14 +293,14 @@ export class Viewport {
 
   isOffsetPointInViewport(point: IPoint, sensitive?: boolean) {
     if (!this.innerRect) return false;
-    if (!this.containsElement(document.elementFromPoint(point.x, point.y)))
+    if (!this.containsElement(document.elementFromPoint(point.x, point.y)!))
       return false;
     return isPointInRect(point, this.innerRect, sensitive);
   }
 
   isOffsetRectInViewport(rect: IRect) {
     if (!this.innerRect) return false;
-    if (!this.containsElement(document.elementFromPoint(rect.x, rect.y))) {
+    if (!this.containsElement(document.elementFromPoint(rect.x, rect.y)!)) {
       return false;
     }
     return isRectInRect(rect, this.innerRect);
@@ -318,7 +318,7 @@ export class Viewport {
     });
   }
 
-  findElementById(id: string): HTMLElement {
+  findElementById(id: string): HTMLElement | undefined {
     if (!id) return;
     if (this.nodeElementsStore[id]) return this.nodeElementsStore[id][0];
     return this.viewportRoot?.querySelector(
@@ -345,19 +345,17 @@ export class Viewport {
   getOffsetPoint(topPoint: IPoint) {
     const data = this.getCurrentData();
     return {
-      x: topPoint.x - this.offsetX + data.scrollX,
-      y: topPoint.y - this.offsetY + data.scrollY,
+      x: topPoint.x - this.offsetX + data.scrollX!,
+      y: topPoint.y - this.offsetY + data.scrollY!,
     };
   }
 
   //相对于页面
-  getElementRect(element: HTMLElement | Element) {
+  getElementRect(element: HTMLElement) {
     const rect = element.getBoundingClientRect();
-    const offsetWidth = element["offsetWidth"]
-      ? element["offsetWidth"]
-      : rect.width;
-    const offsetHeight = element["offsetHeight"]
-      ? element["offsetHeight"]
+    const offsetWidth = element.offsetWidth ? element.offsetWidth : rect.width;
+    const offsetHeight = element.offsetHeight
+      ? element.offsetHeight
       : rect.height;
     return new Rect(
       rect.x,
@@ -439,8 +437,8 @@ export class Viewport {
     }
   }
 
-  getValidNodeElement(node: TreeNode): Element {
-    const getNodeElement = (node: TreeNode) => {
+  getValidNodeElement(node: TreeNode) {
+    const getNodeElement = (node: TreeNode): Element | undefined => {
       if (!node) return;
       const ele = this.findElementById(node.id);
       if (ele) {
@@ -452,7 +450,7 @@ export class Viewport {
     return getNodeElement(node);
   }
 
-  getChildrenRect(node: TreeNode): Rect {
+  getChildrenRect(node: TreeNode): Rect | undefined {
     if (!node?.children?.length) return;
     return calcBoundingRect(
       node.children.reduce((buf, child) => {
@@ -461,11 +459,11 @@ export class Viewport {
           return buf.concat(rect);
         }
         return buf;
-      }, []),
+      }, [] as Rect[]),
     );
   }
 
-  getChildrenOffsetRect(node: TreeNode): Rect {
+  getChildrenOffsetRect(node: TreeNode): Rect | undefined {
     if (!node?.children?.length) return;
 
     return calcBoundingRect(
@@ -475,16 +473,16 @@ export class Viewport {
           return buf.concat(rect);
         }
         return buf;
-      }, []),
+      }, [] as Rect[]),
     );
   }
 
-  getValidNodeRect(node: TreeNode): Rect {
+  getValidNodeRect(node: TreeNode): Rect | undefined {
     if (!node) return;
     const rect = this.getElementRectById(node.id);
     if (node && node === node.root && node.isInOperation) {
       if (!rect) return this.rect;
-      return calcBoundingRect([this.rect, rect]);
+      return calcBoundingRect([this.rect!, rect]);
     }
 
     if (rect) {
@@ -494,7 +492,7 @@ export class Viewport {
     }
   }
 
-  getValidNodeOffsetRect(node: TreeNode): Rect {
+  getValidNodeOffsetRect(node: TreeNode): Rect | undefined {
     if (!node) return;
     const rect = this.getElementOffsetRectById(node.id);
     if (node && node === node.root && node.isInOperation) {
@@ -511,6 +509,6 @@ export class Viewport {
   getValidNodeLayout(node: TreeNode) {
     if (!node) return "vertical";
     if (node.parent?.designerProps?.inlineChildrenLayout) return "horizontal";
-    return calcElementLayout(this.findElementById(node.id));
+    return calcElementLayout(this.findElementById(node.id)!);
   }
 }

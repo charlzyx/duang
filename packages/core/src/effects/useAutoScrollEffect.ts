@@ -9,15 +9,15 @@ import { DragMoveEvent, DragStartEvent, DragStopEvent } from "../events";
 import { CursorStatus, Engine, Viewport } from "../models";
 
 export const useAutoScrollEffect = (engine: Engine) => {
-  let xScroller: IAutoScrollBasicInfo = null;
-  let yScroller: IAutoScrollBasicInfo = null;
-  let xScrollerAnimationStop = null;
-  let yScrollerAnimationStop = null;
+  let xScroller: IAutoScrollBasicInfo | null = null;
+  let yScroller: IAutoScrollBasicInfo | null = null;
+  let xScrollerAnimationStop: ReturnType<typeof scrollAnimate> | null = null;
+  let yScrollerAnimationStop: ReturnType<typeof scrollAnimate> | null = null;
 
   const scrolling = (point: IPoint, viewport: Viewport) => {
     if (engine.cursor.status === CursorStatus.Dragging) {
-      xScroller = calcAutoScrollBasicInfo(point, "x", viewport.rect);
-      yScroller = calcAutoScrollBasicInfo(point, "y", viewport.rect);
+      xScroller = calcAutoScrollBasicInfo(point, "x", viewport.rect!);
+      yScroller = calcAutoScrollBasicInfo(point, "y", viewport.rect!);
       if (xScroller) {
         if (xScrollerAnimationStop) {
           xScrollerAnimationStop();
@@ -61,7 +61,7 @@ export const useAutoScrollEffect = (engine: Engine) => {
     engine.workbench.eachWorkspace((workspace) => {
       const viewport = workspace.viewport;
       const outline = workspace.outline;
-      const point = new Point(event.data.topClientX, event.data.topClientY);
+      const point = new Point(event.data.topClientX!, event.data.topClientY!);
       if (outline.isPointInViewport(point)) {
         scrolling(point, outline);
       } else if (viewport.isPointInViewport(point)) {

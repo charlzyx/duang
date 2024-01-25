@@ -6,17 +6,18 @@ import { IDesignerLayoutProps } from "../types";
 
 export const Layout: React.FC<IDesignerLayoutProps> = (props) => {
   const layout = useContext(DesignerLayoutContext);
-  const ref = useRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     if (ref.current) {
-      each(props.variables, (value, key) => {
-        ref.current.style.setProperty(`--${key}`, value);
+      each(props.variables!, (value, key) => {
+        ref.current?.style.setProperty(`--${key}`, value);
       });
     }
   }, []);
 
   if (layout) {
+    // biome-ignore lint/complexity/noUselessFragments: <explanation>
     return <Fragment>{props.children}</Fragment>;
   }
   return (
@@ -30,8 +31,8 @@ export const Layout: React.FC<IDesignerLayoutProps> = (props) => {
       <DesignerLayoutContext.Provider
         value={{
           theme: props.theme,
-          prefixCls: props.prefixCls,
-          position: props.position,
+          prefixCls: props.prefixCls!,
+          position: props.position!,
         }}
       >
         {props.children}

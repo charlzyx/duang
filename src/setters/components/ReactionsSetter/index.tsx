@@ -27,7 +27,7 @@ export interface IReactionsSetterProps {
   onChange?: (value: IReaction) => void;
 }
 
-const TypeView = ({ value }) => {
+const TypeView = ({ value }: { value: any }) => {
   const text = String(value);
   if (text.length <= 26) return <Tag>{text}</Tag>;
   return (
@@ -146,7 +146,7 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
     });
   }, [modalVisible, props.value]);
   const formCollapse = useMemo(
-    () => FormCollapse.createFormCollapse(["deps", "state"]),
+    () => FormCollapse.createFormCollapse?.(["deps", "state"]),
     [modalVisible],
   );
   const openModal = () => setModalVisible(true);
@@ -336,10 +336,11 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                                       source.inputValues[1]?.props?.type ||
                                       "any";
                                   } else if (property[0] === "inputValues") {
-                                    field.value = `any[]`;
+                                    field.value = "any[]";
                                   } else if (property[0]) {
-                                    field.value =
-                                      FieldStateValueTypes[property[0]];
+                                    field.value = (FieldStateValueTypes as any)[
+                                      property[0]
+                                    ];
                                   } else {
                                     field.value = "any";
                                   }
@@ -416,7 +417,7 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                       x-reactions={(field) => {
                         const deps = field.query("dependencies").value();
                         if (Array.isArray(deps)) {
-                          field.componentProps.extraLib = `
+                          field.componentProps["extraLib"] = `
                           declare var $deps : {
                             ${deps.map(({ name, type }) => {
                               if (!name) return "";

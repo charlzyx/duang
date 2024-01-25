@@ -18,7 +18,7 @@ const loadDependencies = async (deps: IDependency[]) => {
 };
 
 export const initDeclaration = async () => {
-  return MonacoInput.loader.init().then(async (monaco) => {
+  return MonacoInput.loader!.init().then(async (monaco) => {
     const deps = await loadDependencies([
       { name: "@formily/core", path: "dist/formily.core.all.d.ts" },
     ]);
@@ -62,7 +62,7 @@ export const initDeclaration = async () => {
       declare var $props: (props: any) => void
     }
     `,
-      `file:///node_modules/formily_global.d.ts`,
+      "file:///node_modules/formily_global.d.ts",
     );
   });
 };

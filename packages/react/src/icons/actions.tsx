@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const AddSort = (
   <g stroke="none" strokeWidth="1" fillRule="evenodd">
@@ -35,7 +35,7 @@ export const AddSort = (
       rx="40"
     ></rect>
   </g>
-)
+);
 
 export const AddIndex = (
   <g stroke="none" strokeWidth="1" fillRule="evenodd">
@@ -52,7 +52,7 @@ export const AddIndex = (
       fillRule="nonzero"
     ></path>
   </g>
-)
+);
 
 export const AddColumn = (
   <g stroke="none" strokeWidth="1" fillRule="evenodd">
@@ -77,7 +77,7 @@ export const AddColumn = (
       rx="40"
     ></rect>
   </g>
-)
+);
 
 export const AddColumnGroup = (
   <g stroke="none" strokeWidth="1" fillRule="evenodd">
@@ -95,7 +95,7 @@ export const AddColumnGroup = (
       rx="40"
     ></rect>
   </g>
-)
+);
 
 export const AddPanel = (
   <g stroke="none" strokeWidth="1" fillRule="evenodd">
@@ -105,7 +105,7 @@ export const AddPanel = (
     ></path>
     <rect x="40" y="281" width="984" height="80" rx="40"></rect>
   </g>
-)
+);
 
 export const AddOperation = (
   <g stroke="none" strokeWidth="1" fillRule="evenodd">
@@ -135,4 +135,4 @@ export const AddOperation = (
       fillRule="nonzero"
     ></path>
   </g>
-)
+);

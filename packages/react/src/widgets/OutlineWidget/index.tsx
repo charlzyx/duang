@@ -18,7 +18,7 @@ export interface IOutlineTreeWidgetProps {
 
 export const OutlineTreeWidget: React.FC<IOutlineTreeWidgetProps> = observer(
   ({ onClose, style, renderActions, renderTitle, className, ...props }) => {
-    const ref = useRef<HTMLDivElement>();
+    const ref = useRef<HTMLDivElement>(null);
     const prefix = usePrefix("outline-tree");
     const workbench = useWorkbench();
     const current = workbench?.activeWorkspace || workbench?.currentWorkspace;
@@ -45,13 +45,13 @@ export const OutlineTreeWidget: React.FC<IOutlineTreeWidgetProps> = observer(
       <NodeContext.Provider value={{ renderActions, renderTitle }}>
         <div
           {...props}
-          className={cls(prefix + "-container", className)}
+          className={cls(`${prefix}-container`, className)}
           style={style}
         >
-          <div className={prefix + "-content"} ref={ref}>
+          <div className={`${prefix}-content`} ref={ref}>
             <OutlineTreeNode node={tree} workspaceId={workspaceId} />
             <div
-              className={prefix + "-aux"}
+              className={`${prefix}-aux`}
               style={{
                 pointerEvents: "none",
               }}

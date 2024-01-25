@@ -68,7 +68,7 @@ export const createResource = (...sources: IResourceCreator[]): IResource[] => {
         children: source.elements || [],
       }),
     });
-  }, []);
+  }, [] as IResource[]);
 };
 
 export const createDesigner = (props: IEngineProps<Engine> = {}) => {

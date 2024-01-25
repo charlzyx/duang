@@ -53,7 +53,7 @@ const isExpression = (val: any) => isStr(val) && /^\{\{.*\}\}$/.test(val);
 const filterExpression = (val: any) => {
   if (typeof val === "object") {
     const isArray = isArr(val);
-    const results = reduce(
+    const results: any = reduce(
       val,
       (buf: any, value, key) => {
         if (isExpression(value)) {
@@ -86,9 +86,10 @@ const toDesignableFieldProps = (
 ) => {
   const results: any = {};
   each(SchemaStateMap, (fieldKey, schemaKey) => {
-    const value = schema[schemaKey];
+    const value = schema[schemaKey as any];
     if (isExpression(value)) {
-      if (!NeedShownExpression[schemaKey]) return;
+      if (!NeedShownExpression[schemaKey as keyof typeof NeedShownExpression])
+        return;
       if (value) {
         results[fieldKey] = value;
         return;
@@ -135,7 +136,7 @@ export const Field: DnFC<ISchema> = observer((props) => {
   const fieldProps = toDesignableFieldProps(
     props,
     components,
-    designer.props.nodeIdAttrName,
+    designer.props.nodeIdAttrName!,
     node.id,
   );
   if (props.type === "object") {
@@ -148,7 +149,7 @@ export const Field: DnFC<ISchema> = observer((props) => {
     );
   } else if (props.type === "array") {
     return <ArrayField {...fieldProps} name={node.id} />;
-  } else if (node.props.type === "void") {
+  } else if (node.props?.["type"] === "void") {
     return (
       <VoidField {...fieldProps} name={node.id}>
         {props.children}

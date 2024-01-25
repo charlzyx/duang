@@ -6,7 +6,7 @@ import {
   useNodeIdProps,
   useTreeNode,
 } from "@duang/react";
-import { ArrayBase } from "@formily/antd";
+import { ArrayBase as AntdArrayBase } from "@formily/antd";
 import { observer } from "@formily/react";
 import { Table, TableProps } from "antd";
 import cls from "classnames";
@@ -24,6 +24,8 @@ import {
 import { createArrayBehavior } from "../ArrayBase";
 import { createVoidFieldSchema } from "../Field";
 import "./styles.less";
+const ArrayBase = AntdArrayBase as Required<typeof AntdArrayBase> &
+  typeof AntdArrayBase;
 
 const ensureObjectItemsNode = createEnsureTypeItemsNode("object");
 
@@ -59,7 +61,7 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
         type: "void",
         "x-component": "ArrayTable.Column",
         "x-component-props": {
-          title: `Title`,
+          title: "Title",
         },
       },
       children: [
@@ -78,7 +80,7 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
         type: "void",
         "x-component": "ArrayTable.Column",
         "x-component-props": {
-          title: `Title`,
+          title: "Title",
         },
       },
       children: [
@@ -97,11 +99,11 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
         type: "void",
         "x-component": "ArrayTable.Column",
         "x-component-props": {
-          title: `Title`,
+          title: "Title",
         },
       },
       children: source.map((node) => {
-        node.props.title = undefined;
+        node.props!["title"] = undefined;
         return node;
       }),
     });
@@ -112,7 +114,7 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
         type: "void",
         "x-component": "ArrayTable.Column",
         "x-component-props": {
-          title: `Title`,
+          title: "Title",
         },
       },
       children: [
@@ -196,7 +198,7 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
             const children = node.children.map((child) => {
               return <TreeNodeWidget node={child} key={child.id} />;
             });
-            const props = node.props["x-component-props"];
+            const props = node.props!["x-component-props"];
             return (
               <Table.Column
                 {...props}
@@ -210,7 +212,7 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
                 key={node.id}
                 render={(value, record, key) => {
                   return (
-                    <ArrayBase.Item key={key} index={key} record={null}>
+                    <ArrayBase.Item key={key} index={key} record={null!}>
                       {children.length > 0 ? children : "Droppable"}
                     </ArrayBase.Item>
                   );
@@ -231,7 +233,7 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
 
   useDropTemplate("ArrayTable.Column", (source) => {
     return source.map((node) => {
-      node.props.title = undefined;
+      node.props!["title"] = undefined;
       return node;
     });
   });
@@ -260,7 +262,7 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
                   type: "void",
                   "x-component": "ArrayTable.Column",
                   "x-component-props": {
-                    title: `Title`,
+                    title: "Title",
                   },
                 },
                 children: [
@@ -295,7 +297,7 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
                   type: "void",
                   "x-component": "ArrayTable.Column",
                   "x-component-props": {
-                    title: `Title`,
+                    title: "Title",
                   },
                 },
                 children: [
@@ -343,7 +345,7 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
                   type: "void",
                   "x-component": "ArrayTable.Column",
                   "x-component-props": {
-                    title: `Title`,
+                    title: "Title",
                   },
                 },
               });
@@ -381,7 +383,7 @@ export const ArrayTable: DnFC<TableProps<any>> = observer((props) => {
                     type: "void",
                     "x-component": "ArrayTable.Column",
                     "x-component-props": {
-                      title: `Title`,
+                      title: "Title",
                     },
                   },
                   children: [
@@ -434,11 +436,11 @@ ArrayBase.mixin(ArrayTable);
 ArrayTable.Behavior = createBehavior(createArrayBehavior("ArrayTable"), {
   name: "ArrayTable.Column",
   extends: ["Field"],
-  selector: (node) => node.props["x-component"] === "ArrayTable.Column",
+  selector: (node) => node.props!["x-component"] === "ArrayTable.Column",
   designerProps: {
     droppable: true,
     allowDrop: (node) =>
-      node.props["type"] === "object" &&
+      node.props!["type"] === "object" &&
       node.parent?.props?.["x-component"] === "ArrayTable",
     propsSchema: createVoidFieldSchema(AllSchemas.ArrayTable.Column),
   },

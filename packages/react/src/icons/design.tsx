@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const Design = (
   <svg viewBox="0 0 1260 1024">
@@ -7,4 +7,4 @@ export const Design = (
       p-id="3059"
     ></path>
   </svg>
-)
+);

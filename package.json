@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.x",
+    "@biomejs/biome": "^1.5.3",
     "@duang/core": "workspace:*",
     "@duang/react": "workspace:*",
     "@duang/settings-form": "workspace:*",

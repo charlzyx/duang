@@ -30,10 +30,10 @@ export type IEngineProps<T = Event> = IEventProps<T> & {
 };
 
 export type IEngineContext = {
-  workspace: Workspace;
+  workspace: Workspace | null;
   workbench: Workbench;
   engine: Engine;
-  viewport: Viewport;
+  viewport: Viewport | null;
 };
 
 export type IResizable = {

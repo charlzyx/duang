@@ -47,7 +47,7 @@ export const FormTab: DnFC<TabsProps> & {
           type: "void",
           "x-component": "FormTab.TabPane",
           "x-component-props": {
-            tab: `Unnamed Title`,
+            tab: "Unnamed Title",
           },
         },
         children: source,
@@ -60,13 +60,13 @@ export const FormTab: DnFC<TabsProps> & {
     return (
       <Tabs
         {...props}
-        activeKey={getCorrectActiveKey(activeKey, tabs)}
+        activeKey={getCorrectActiveKey(activeKey!, tabs)}
         onChange={(id) => {
           setActiveKey(id);
         }}
       >
         {tabs.map((tab) => {
-          const props = tab.props["x-component-props"] || {};
+          const props = tab.props?.["x-component-props"] || {};
           return (
             <Tabs.TabPane
               {...props}
@@ -84,7 +84,7 @@ export const FormTab: DnFC<TabsProps> & {
               {React.createElement(
                 "div",
                 {
-                  [designer.props.nodeIdAttrName]: tab.id,
+                  [designer.props.nodeIdAttrName!]: tab.id,
                   style: {
                     padding: "20px 0",
                   },
@@ -116,7 +116,7 @@ export const FormTab: DnFC<TabsProps> & {
                   type: "void",
                   "x-component": "FormTab.TabPane",
                   "x-component-props": {
-                    tab: `Unnamed Title`,
+                    tab: "Unnamed Title",
                   },
                 },
               });
@@ -138,12 +138,14 @@ FormTab.Behavior = createBehavior(
   {
     name: "FormTab",
     extends: ["Field"],
-    selector: (node) => node.props["x-component"] === "FormTab",
+    selector: (node) => node.props?.["x-component"] === "FormTab",
     designerProps: {
       droppable: true,
       allowAppend: (target, source) =>
         target.children.length === 0 ||
-        source.every((node) => node.props["x-component"] === "FormTab.TabPane"),
+        source!.every(
+          (node) => node.props?.["x-component"] === "FormTab.TabPane",
+        ),
       propsSchema: createVoidFieldSchema(AllSchemas.FormTab),
     },
     designerLocales: AllLocales.FormTab,
@@ -151,10 +153,10 @@ FormTab.Behavior = createBehavior(
   {
     name: "FormTab.TabPane",
     extends: ["Field"],
-    selector: (node) => node.props["x-component"] === "FormTab.TabPane",
+    selector: (node) => node.props?.["x-component"] === "FormTab.TabPane",
     designerProps: {
       droppable: true,
-      allowDrop: (node) => node.props["x-component"] === "FormTab",
+      allowDrop: (node) => node.props?.["x-component"] === "FormTab",
       propsSchema: createVoidFieldSchema(AllSchemas.FormTab.TabPane),
     },
     designerLocales: AllLocales.FormTabPane,

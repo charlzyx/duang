@@ -141,7 +141,7 @@ export const createFieldSchema = (
           },
         },
       },
-      ...createComponentSchema(component, decorator),
+      ...createComponentSchema(component!, decorator),
     },
   };
 };
@@ -215,7 +215,7 @@ export const createVoidFieldSchema = (
           },
         },
       },
-      ...createComponentSchema(component, decorator),
+      ...createComponentSchema(component!, decorator),
     },
   };
 };

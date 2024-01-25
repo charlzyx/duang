@@ -87,7 +87,7 @@ export const BorderStyleSetter: React.FC<IBorderStyleSetterProps> = observer(
       <FoldItem label={field.title}>
         <FoldItem.Extra>
           <div className={cls(prefix, className)} style={style}>
-            <div className={prefix + "-position"}>
+            <div className={`${prefix}-position`}>
               <PositionInput
                 value={currentPosition.value}
                 onChange={(value) => {
@@ -95,7 +95,7 @@ export const BorderStyleSetter: React.FC<IBorderStyleSetterProps> = observer(
                 }}
               />
             </div>
-            <div className={prefix + "-input"}>
+            <div className={`${prefix}-input`}>
               {Positions.map((position, key) => {
                 return (
                   <Fragment key={key}>

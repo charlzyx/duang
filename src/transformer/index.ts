@@ -22,7 +22,7 @@ const createOptions = (options: ITransformerOptions): ITransformerOptions => {
 
 const findNode = (node: ITreeNode, finder?: (node: ITreeNode) => boolean) => {
   if (!node) return;
-  if (finder(node)) return node;
+  if (finder?.(node)) return node;
   if (!node.children) return;
   for (let i = 0; i < node.children.length; i++) {
     if (findNode(node.children[i])) return node.children[i];
@@ -34,7 +34,7 @@ export const transformToSchema = (
   node: ITreeNode,
   options?: ITransformerOptions,
 ): IFormilySchema => {
-  const realOptions = createOptions(options);
+  const realOptions = createOptions(options!);
   const root = findNode(node, (child) => {
     return child.componentName === realOptions.designableFormName;
   });
@@ -49,7 +49,7 @@ export const transformToSchema = (
     }
     schema["x-designable-id"] = node.id;
     if (schema.type === "array") {
-      if (node.children[0]) {
+      if (node.children?.[0]) {
         if (
           node.children[0].componentName === realOptions.designableFieldName
         ) {
@@ -57,20 +57,20 @@ export const transformToSchema = (
           schema["x-index"] = 0;
         }
       }
-      node.children.slice(1).forEach((child, index) => {
+      node.children?.slice(1).forEach((child, index) => {
         if (child.componentName !== realOptions.designableFieldName) return;
-        const key = child.props.name || child.id;
+        const key = child.props?.["name"] || child.id;
         schema.properties = schema.properties || {};
-        schema.properties[key] = createSchema(child);
-        schema.properties[key]["x-index"] = index;
+        (schema.properties as any)[key] = createSchema(child);
+        (schema.properties as any)[key]["x-index"] = index;
       });
     } else {
-      node.children.forEach((child, index) => {
+      node.children?.forEach((child, index) => {
         if (child.componentName !== realOptions.designableFieldName) return;
-        const key = child.props.name || child.id;
+        const key = child.props?.["name"] || child.id;
         schema.properties = schema.properties || {};
-        schema.properties[key] = createSchema(child);
-        schema.properties[key]["x-index"] = index;
+        (schema.properties as any)[key] = createSchema(child);
+        (schema.properties as any)[key]["x-index"] = index;
       });
     }
     return schema;
@@ -82,13 +82,13 @@ export const transformToTreeNode = (
   formily: IFormilySchema = {},
   options?: ITransformerOptions,
 ) => {
-  const realOptions = createOptions(options);
+  const realOptions = createOptions(options!);
   const root: ITreeNode = {
     componentName: realOptions.designableFormName,
     props: formily.form,
     children: [],
   };
-  const schema = new Schema(formily.schema);
+  const schema = new Schema(formily.schema!);
   const cleanProps = (props: any) => {
     if (props["name"] === props["x-designable-id"]) {
       delete props.name;
@@ -105,7 +105,7 @@ export const transformToTreeNode = (
       props: cleanProps(schema.toJSON(false)),
       children: [],
     };
-    parent.children.push(current);
+    parent.children?.push(current);
     if (schema.items && !Array.isArray(schema.items)) {
       appendTreeNode(current, schema.items);
     }

@@ -53,14 +53,14 @@ export const queryNodesByComponentPath = (
   return matchComponent(node, path[0])
     ? node.children.reduce((buf, child) => {
         return buf.concat(queryNodesByComponentPath(child, path.slice(1)));
-      }, [])
+      }, [] as TreeNode[])
     : [];
 };
 
 export const findNodeByComponentPath = (
   node: TreeNode,
   path: ComponentNameMatcher[],
-): TreeNode => {
+): TreeNode | undefined => {
   if (path?.length === 0) return;
   if (path?.length === 1) {
     if (matchComponent(node, path[0])) {
@@ -84,20 +84,20 @@ export const hasNodeByComponentPath = (
 
 export const matchArrayItemsNode = (node: TreeNode) => {
   return (
-    node?.parent?.props?.type === "array" &&
+    node?.parent?.props?.["type"] === "array" &&
     node?.parent?.children?.[0] === node
   );
 };
 
 export const createNodeId = (designer: Engine, id: string) => {
   return {
-    [designer.props.nodeIdAttrName]: id,
+    [designer.props.nodeIdAttrName!]: id,
   };
 };
 
 export const createEnsureTypeItemsNode = (type: string) => (node: TreeNode) => {
   const objectNode = node.children.find(
-    (child) => child.props["type"] === type,
+    (child) => child.props?.["type"] === type,
   );
   if (objectNode) {
     return objectNode;

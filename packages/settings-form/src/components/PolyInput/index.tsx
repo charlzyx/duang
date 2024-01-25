@@ -63,11 +63,11 @@ export function createPolyInput(polyTypes: PolyTypes = []): React.FC<IInput> {
     ...props
   }) => {
     const prefix = usePrefix("poly-input");
-    const types = createTypes(polyTypes, exclude, include);
+    const types = createTypes(polyTypes, exclude!, include!);
     const [current, setCurrent] = useState(types[0]?.type);
     const type = types?.find(({ type }) => type === current);
     const component = type?.component;
-    const typesValue = useRef({});
+    const typesValue = useRef<Record<string, string>>({});
     useEffect(() => {
       types?.forEach(({ checker, type }) => {
         if (checker(value)) {
@@ -90,20 +90,20 @@ export function createPolyInput(polyTypes: PolyTypes = []): React.FC<IInput> {
     return (
       <div className={cls(prefix, className)} style={style}>
         {component && (
-          <div className={prefix + "-content"}>
+          <div className={`${prefix}-content`}>
             {React.createElement(component, {
               ...props,
               value: type?.toInputValue ? type?.toInputValue(value) : value,
               onChange: (event: any) => {
                 const value = getEventValue(event);
-                typesValue.current[type?.type] = value;
+                typesValue.current[type?.type as string] = value;
                 onChange?.(transformOnChangeValue(value, type));
               },
             })}
           </div>
         )}
         <Button
-          className={prefix + "-controller"}
+          className={`${prefix}-controller`}
           style={{
             width: !component ? "100%" : "auto",
           }}

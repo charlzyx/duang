@@ -6,7 +6,7 @@ import React, { createContext, useContext, useEffect, useRef } from "react";
 import { usePrefix, useRegistry, useTheme } from "../../hooks";
 import "./styles.less";
 
-const IconContext = createContext<IconProviderProps>(null);
+const IconContext = createContext<IconProviderProps>(null!);
 
 const isNumSize = (val: any) => /^[\d.]+$/.test(val);
 export interface IconProviderProps {
@@ -24,110 +24,113 @@ export interface IIconWidgetProps extends React.HTMLAttributes<HTMLElement> {
   size?: number | string;
 }
 
-export const IconWidget: React.FC<IIconWidgetProps> & {
-  Provider?: React.FC<IconProviderProps>;
-  ShadowSVG?: React.FC<IShadowSVGProps>;
-} = observer((props: IIconWidgetProps) => {
-  const theme = useTheme();
-  const context = useContext(IconContext);
-  const registry = useRegistry();
-  const prefix = usePrefix("icon");
-  const size = props.size || "1em";
-  const height = props.style?.height || size;
-  const width = props.style?.width || size;
-  const takeIcon = (infer: React.ReactNode) => {
-    if (isStr(infer)) {
-      const finded = registry.getDesignerIcon(infer);
-      if (finded) {
-        return takeIcon(finded);
-      }
-      return <img src={infer} height={height} width={width} />;
-    } else if (isFn(infer)) {
-      return React.createElement(infer, {
-        height,
-        width,
-        fill: "currentColor",
-      });
-    } else if (React.isValidElement(infer)) {
-      if (infer.type === "svg") {
-        return React.cloneElement(infer, {
+export const OriginIconWidget: React.FC<IIconWidgetProps> = observer(
+  (props: IIconWidgetProps) => {
+    const theme = useTheme()!;
+    const context = useContext(IconContext);
+    const registry = useRegistry();
+    const prefix = usePrefix("icon");
+    const size = props.size || "1em";
+    const height = props.style?.height || size!;
+    const width = props.style?.width || size!;
+    const takeIcon = (infer: React.ReactNode): React.ReactNode => {
+      if (isStr(infer)) {
+        const finded = registry.getDesignerIcon(infer);
+        if (finded) {
+          return takeIcon(finded);
+        }
+        return <img src={infer} height={height} width={width} />;
+      } else if (isFn(infer)) {
+        return React.createElement(infer, {
           height,
           width,
           fill: "currentColor",
-          viewBox: infer.props.viewBox || "0 0 1024 1024",
-          focusable: "false",
-          "aria-hidden": "true",
         });
-      } else if (infer.type === "path" || infer.type === "g") {
-        return (
-          <svg
-            viewBox="0 0 1024 1024"
-            height={height}
-            width={width}
-            fill="currentColor"
-            focusable="false"
-            aria-hidden="true"
-          >
-            {infer}
-          </svg>
-        );
+      } else if (React.isValidElement(infer)) {
+        if (infer.type === "svg") {
+          return React.cloneElement(infer, {
+            // @ts-ignore
+            height,
+            width,
+            fill: "currentColor",
+            viewBox: infer.props.viewBox || "0 0 1024 1024",
+            focusable: "false",
+            "aria-hidden": "true",
+          });
+        } else if (infer.type === "path" || infer.type === "g") {
+          return (
+            <svg
+              viewBox="0 0 1024 1024"
+              height={height}
+              width={width}
+              fill="currentColor"
+              focusable="false"
+              aria-hidden="true"
+            >
+              {infer}
+            </svg>
+          );
+        }
+        return infer;
+      } else if (isPlainObj(infer)) {
+        const anyinfer = infer as any;
+        if (anyinfer[theme]) {
+          return takeIcon(anyinfer[theme]);
+        } else if (anyinfer.shadow) {
+          return (
+            <IconWidget.ShadowSVG
+              width={width}
+              height={height}
+              content={anyinfer.shadow}
+            />
+          );
+        }
+        return null;
       }
-      return infer;
-    } else if (isPlainObj(infer)) {
-      if (infer[theme]) {
-        return takeIcon(infer[theme]);
-      } else if (infer["shadow"]) {
-        return (
-          <IconWidget.ShadowSVG
-            width={width}
-            height={height}
-            content={infer["shadow"]}
-          />
-        );
-      }
-      return null;
-    }
-  };
-  const renderTooltips = (children: React.ReactElement): React.ReactElement => {
-    if (!isStr(props.infer) && context?.tooltip) return children as any;
-    const tooltip =
-      props.tooltip || registry.getDesignerMessage(`icons.${props.infer}`);
-    if (tooltip) {
-      const title =
-        React.isValidElement(tooltip) || isStr(tooltip)
-          ? tooltip
-          : tooltip.title;
-      const props =
-        React.isValidElement(tooltip) || isStr(tooltip)
-          ? {}
-          : isObj(tooltip)
+    };
+    const renderTooltips = (
+      children: React.ReactElement,
+    ): React.ReactElement => {
+      if (!isStr(props.infer) && context?.tooltip) return children as any;
+      const tooltip =
+        props.tooltip || registry.getDesignerMessage(`icons.${props.infer}`);
+      if (tooltip) {
+        const title =
+          React.isValidElement(tooltip) || isStr(tooltip)
             ? tooltip
-            : {};
-      return (
-        <Tooltip {...props} title={title}>
-          {children}
-        </Tooltip>
-      );
-    }
-    return children;
-  };
-  if (!props.infer) return null;
-  return renderTooltips(
-    <span
-      {...props}
-      className={cls(prefix, props.className)}
-      style={{
-        ...props.style,
-        cursor: props.onClick ? "pointer" : props.style?.cursor,
-      }}
-    >
-      {takeIcon(props.infer)}
-    </span>,
-  );
-});
+            : tooltip.title;
+        const props =
+          React.isValidElement(tooltip) || isStr(tooltip)
+            ? {}
+            : isObj(tooltip)
+              ? tooltip
+              : {};
+        return (
+          <Tooltip {...props} title={title}>
+            {children}
+          </Tooltip>
+        );
+      }
+      return children;
+    };
+    if (!props.infer) return null;
+    return renderTooltips(
+      <span
+        {...props}
+        className={cls(prefix, props.className)}
+        style={{
+          ...props.style,
+          cursor: props.onClick ? "pointer" : props.style?.cursor,
+        }}
+      >
+        {takeIcon(props.infer)}
+      </span>,
+    );
+  },
+);
 
-IconWidget.ShadowSVG = (props) => {
-  const ref = useRef<HTMLDivElement>();
+const ShadowSVG: React.FC<IShadowSVGProps> = (props) => {
+  const ref = useRef<HTMLDivElement>(null);
   const width = isNumSize(props.width) ? `${props.width}px` : props.width;
   const height = isNumSize(props.height) ? `${props.height}px` : props.height;
   useEffect(() => {
@@ -141,8 +144,13 @@ IconWidget.ShadowSVG = (props) => {
   return <div ref={ref}></div>;
 };
 
-IconWidget.Provider = (props) => {
+const Provider: React.FC<IconProviderProps> = (props) => {
   return (
     <IconContext.Provider value={props}>{props.children}</IconContext.Provider>
   );
 };
+
+export const IconWidget = Object.assign(OriginIconWidget, {
+  ShadowSVG,
+  Provider,
+});

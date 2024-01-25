@@ -23,9 +23,9 @@ const StudioPanelInternal: React.FC<IStudioPanelProps> = ({
   if (logo || actions) {
     return (
       <div {...props} className={cls(`${prefix}-container`, classNameBase)}>
-        <div className={prefix + "-header"}>
-          <div className={prefix + "-header-logo"}>{logo}</div>
-          <div className={prefix + "-header-actions"}>{actions}</div>
+        <div className={`${prefix}-header`}>
+          <div className={`${prefix}-header-logo`}>{logo}</div>
+          <div className={`${prefix}-header-actions`}>{actions}</div>
         </div>
         <div className={prefix}>{props.children}</div>
       </div>

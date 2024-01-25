@@ -7,45 +7,45 @@ import {
   DecoratorPropsHelper,
   DisplayHelper,
   ComponentPropsHelper,
-} from './helpers'
+} from "./helpers";
 
 export const FieldProperties = [
   {
-    key: 'visible',
-    type: 'boolean',
+    key: "visible",
+    type: "boolean",
     helpCode: BooleanHelper,
   },
-  { key: 'hidden', type: 'boolean', helpCode: BooleanHelper },
+  { key: "hidden", type: "boolean", helpCode: BooleanHelper },
   {
-    key: 'display',
+    key: "display",
     type: '"visible" | "hidden" | "none"',
     helpCode: DisplayHelper,
   },
   {
-    key: 'pattern',
+    key: "pattern",
     type: '"editable" | "disabled" | "readOnly" | "readPretty"',
     helpCode: PatternHelper,
   },
-  { key: 'title', type: 'string', helpCode: StringHelper },
-  { key: 'description', type: 'string', helpCode: StringHelper },
-  { key: 'value', type: 'any', helpCode: AnyHelper },
-  { key: 'initialValue', type: 'any', helpCode: AnyHelper },
-  { key: 'required', type: 'boolean', helpCode: BooleanHelper },
+  { key: "title", type: "string", helpCode: StringHelper },
+  { key: "description", type: "string", helpCode: StringHelper },
+  { key: "value", type: "any", helpCode: AnyHelper },
+  { key: "initialValue", type: "any", helpCode: AnyHelper },
+  { key: "required", type: "boolean", helpCode: BooleanHelper },
   {
-    key: 'dataSource',
-    type: 'Array<{label?:string,value?:any}>',
+    key: "dataSource",
+    type: "Array<{label?:string,value?:any}>",
     helpCode: DataSourceHelper,
   },
   {
-    key: 'componentProps',
-    token: 'componentProps',
-    type: 'object',
+    key: "componentProps",
+    token: "componentProps",
+    type: "object",
     helpCode: ComponentPropsHelper,
   },
   {
-    key: 'decoratorProps',
-    token: 'decoratorProps',
-    type: 'object',
+    key: "decoratorProps",
+    token: "decoratorProps",
+    type: "object",
     helpCode: DecoratorPropsHelper,
   },
-]
+];

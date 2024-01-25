@@ -17,7 +17,7 @@ const MockupImages = {
 
 export const MobileBody: React.FC<IMobileBodyProps> = observer((props) => {
   const screen = useScreen();
-  const theme = useTheme();
+  const theme = useTheme() as "dark" | "light";
   const prefix = usePrefix("mobile-simulator-body");
   const getContentStyles = (): React.CSSProperties => {
     if (screen.flip) {
@@ -49,7 +49,7 @@ export const MobileBody: React.FC<IMobileBodyProps> = observer((props) => {
       }}
     >
       <div
-        className={prefix + "-wrapper"}
+        className={`${prefix}-wrapper`}
         style={{
           position: "relative",
           minHeight: screen.flip ? 0 : 1000,
@@ -67,7 +67,7 @@ export const MobileBody: React.FC<IMobileBodyProps> = observer((props) => {
             backfaceVisibility: "hidden",
           }}
         ></img>
-        <div className={prefix + "-content"} style={getContentStyles()}>
+        <div className={`${prefix}-content`} style={getContentStyles()}>
           {props.children}
         </div>
       </div>

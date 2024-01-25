@@ -21,7 +21,7 @@ export const DrawerSetter: React.FC<IDrawerSetterProps> = observer((props) => {
   const prefix = usePrefix("drawer-setter");
   const formWrapperCls = usePrefix("settings-form-wrapper");
   useLayoutEffect(() => {
-    const wrapper = document.querySelector("." + formWrapperCls);
+    const wrapper = document.querySelector(`.${formWrapperCls}`);
     if (wrapper) {
       setRoot(wrapper);
     }
@@ -35,13 +35,13 @@ export const DrawerSetter: React.FC<IDrawerSetterProps> = observer((props) => {
             animate__slideOutRight: remove,
           })}
         >
-          <div className={prefix + "-header"} onClick={handleClose}>
+          <div className={`${prefix}-header`} onClick={handleClose}>
             <IconWidget infer="Return" size={18} />
-            <span className={prefix + "-header-text"}>
+            <span className={`${prefix}-header-text`}>
               {props.text || field.title}
             </span>
           </div>
-          <div className={prefix + "-body"}>
+          <div className={`${prefix}-body`}>
             <FormLayout
               colon={false}
               labelWidth={120}

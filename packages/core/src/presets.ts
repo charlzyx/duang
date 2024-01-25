@@ -1,38 +1,38 @@
 import {
   DragDropDriver,
+  KeyboardDriver,
   MouseClickDriver,
   MouseMoveDriver,
   ViewportResizeDriver,
   ViewportScrollDriver,
-  KeyboardDriver,
-} from './drivers'
+} from "./drivers";
 import {
-  useCursorEffect,
-  useViewportEffect,
-  useDragDropEffect,
-  useSelectionEffect,
-  useResizeEffect,
-  useKeyboardEffect,
   useAutoScrollEffect,
-  useWorkspaceEffect,
-  useFreeSelectionEffect,
   useContentEditableEffect,
+  useCursorEffect,
+  useDragDropEffect,
+  useFreeSelectionEffect,
+  useKeyboardEffect,
+  useResizeEffect,
+  useSelectionEffect,
   useTranslateEffect,
-} from './effects'
+  useViewportEffect,
+  useWorkspaceEffect,
+} from "./effects";
 import {
-  SelectNodes,
-  SelectAllNodes,
-  SelectSameTypeNodes,
-  DeleteNodes,
   CopyNodes,
-  PasteNodes,
-  UndoMutation,
-  RedoMutation,
   CursorSwitchSelection,
+  DeleteNodes,
+  PasteNodes,
   PreventCommandX,
-  SelectPrevNode,
+  RedoMutation,
+  SelectAllNodes,
   SelectNextNode,
-} from './shortcuts'
+  SelectNodes,
+  SelectPrevNode,
+  SelectSameTypeNodes,
+  UndoMutation,
+} from "./shortcuts";
 
 export const DEFAULT_EFFECTS = [
   useFreeSelectionEffect,
@@ -46,7 +46,7 @@ export const DEFAULT_EFFECTS = [
   useContentEditableEffect,
   useTranslateEffect,
   useResizeEffect,
-]
+];
 
 export const DEFAULT_DRIVERS = [
   MouseMoveDriver,
@@ -55,7 +55,7 @@ export const DEFAULT_DRIVERS = [
   ViewportResizeDriver,
   ViewportScrollDriver,
   KeyboardDriver,
-]
+];
 
 export const DEFAULT_SHORTCUTS = [
   PreventCommandX,
@@ -70,4 +70,4 @@ export const DEFAULT_SHORTCUTS = [
   UndoMutation,
   RedoMutation,
   CursorSwitchSelection,
-]
+];

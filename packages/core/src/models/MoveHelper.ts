@@ -54,23 +54,23 @@ export class MoveHelper {
 
   dragNodes: TreeNode[] = [];
 
-  touchNode: TreeNode = null;
+  touchNode: TreeNode | null = null;
 
-  closestNode: TreeNode = null;
+  closestNode: TreeNode | null = null;
 
-  activeViewport: Viewport = null;
+  activeViewport: Viewport | null = null;
 
-  viewportClosestRect: Rect = null;
+  viewportClosestRect: Rect | null = null;
 
-  outlineClosestRect: Rect = null;
+  outlineClosestRect: Rect | null = null;
 
-  viewportClosestOffsetRect: Rect = null;
+  viewportClosestOffsetRect: Rect | null = null;
 
-  outlineClosestOffsetRect: Rect = null;
+  outlineClosestOffsetRect: Rect | null = null;
 
-  viewportClosestDirection: ClosestPosition = null;
+  viewportClosestDirection: ClosestPosition | null = null;
 
-  outlineClosestDirection: ClosestPosition = null;
+  outlineClosestDirection: ClosestPosition | null = null;
 
   dragging = false;
 
@@ -104,10 +104,13 @@ export class MoveHelper {
   }
 
   getClosestLayout(viewport: Viewport) {
-    return viewport.getValidNodeLayout(this.closestNode);
+    return viewport.getValidNodeLayout(this.closestNode!);
   }
 
-  calcClosestPosition(point: IPoint, viewport: Viewport): ClosestPosition {
+  calcClosestPosition(
+    point: IPoint,
+    viewport: Viewport,
+  ): ClosestPosition | undefined {
     const closestNode = this.closestNode;
     if (!closestNode || !viewport.isPointInViewport(point))
       return ClosestPosition.Forbid;
@@ -121,7 +124,7 @@ export class MoveHelper {
       closestRect,
       viewport.moveInsertionType === "block" ? false : isInline,
     );
-    const getValidParent = (node: TreeNode) => {
+    const getValidParent = (node: TreeNode): TreeNode | undefined => {
       if (!node) return;
       if (node.parent?.allowSibling(this.dragNodes)) return node.parent;
       return getValidParent(node.parent);
@@ -210,7 +213,7 @@ export class MoveHelper {
     }
   }
 
-  calcClosestNode(point: IPoint, viewport: Viewport): TreeNode {
+  calcClosestNode(point: IPoint, viewport: Viewport): TreeNode | undefined {
     if (this.touchNode) {
       const touchNodeRect = viewport.getValidNodeRect(this.touchNode);
       if (!touchNodeRect) return;
@@ -237,7 +240,10 @@ export class MoveHelper {
     return this.operation.tree;
   }
 
-  calcClosestRect(viewport: Viewport, closestDirection: ClosestPosition): Rect {
+  calcClosestRect(
+    viewport: Viewport,
+    closestDirection: ClosestPosition,
+  ): Rect | undefined {
     const closestNode = this.closestNode;
     if (!closestNode || !closestDirection) return;
     const closestRect = viewport.getValidNodeRect(closestNode);
@@ -254,7 +260,7 @@ export class MoveHelper {
   calcClosestOffsetRect(
     viewport: Viewport,
     closestDirection: ClosestPosition,
-  ): Rect {
+  ): Rect | undefined {
     const closestNode = this.closestNode;
     if (!closestNode || !closestDirection) return;
     const closestRect = viewport.getValidNodeOffsetRect(closestNode);
@@ -290,11 +296,11 @@ export class MoveHelper {
     if (this.outline.isPointInViewport(point, false)) {
       this.activeViewport = this.outline;
       this.touchNode = touchNode;
-      this.closestNode = this.calcClosestNode(point, this.outline);
+      this.closestNode = this.calcClosestNode(point, this.outline)!;
     } else if (this.viewport.isPointInViewport(point, false)) {
       this.activeViewport = this.viewport;
       this.touchNode = touchNode;
-      this.closestNode = this.calcClosestNode(point, this.viewport);
+      this.closestNode = this.calcClosestNode(point, this.viewport)!;
     }
     if (!this.activeViewport) return;
 
@@ -302,34 +308,34 @@ export class MoveHelper {
       this.outlineClosestDirection = this.calcClosestPosition(
         point,
         this.outline,
-      );
+      )!;
       this.viewportClosestDirection = this.outlineClosestDirection;
     } else {
       this.viewportClosestDirection = this.calcClosestPosition(
         point,
         this.viewport,
-      );
+      )!;
       this.outlineClosestDirection = this.viewportClosestDirection;
     }
     if (this.outline.mounted) {
       this.outlineClosestRect = this.calcClosestRect(
         this.outline,
         this.outlineClosestDirection,
-      );
+      )!;
       this.outlineClosestOffsetRect = this.calcClosestOffsetRect(
         this.outline,
         this.outlineClosestDirection,
-      );
+      )!;
     }
     if (this.viewport.mounted) {
       this.viewportClosestRect = this.calcClosestRect(
         this.viewport,
         this.viewportClosestDirection,
-      );
+      )!;
       this.viewportClosestOffsetRect = this.calcClosestOffsetRect(
         this.viewport,
         this.viewportClosestDirection,
-      );
+      )!;
     }
   }
 

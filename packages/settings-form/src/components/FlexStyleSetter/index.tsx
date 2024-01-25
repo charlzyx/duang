@@ -31,7 +31,7 @@ export const FlexStyleSetter: React.FC<IFlexStyleSetterProps> = observer(
               },
             ]}
             reactions={(field) => {
-              field.decorator[1].title = `Flex Direction : ${
+              (field.decorator as any)[1].title = `Flex Direction : ${
                 field.value || ""
               }`;
             }}
@@ -52,7 +52,9 @@ export const FlexStyleSetter: React.FC<IFlexStyleSetterProps> = observer(
               },
             ]}
             reactions={(field) => {
-              field.decorator[1].title = `Flex Wrap : ${field.value || ""}`;
+              (field.decorator as any)[1].title = `Flex Wrap : ${
+                field.value || ""
+              }`;
             }}
             decorator={[InputItems.Item]}
             component={[Radio.Group, { optionType: "button" }]}
@@ -87,7 +89,9 @@ export const FlexStyleSetter: React.FC<IFlexStyleSetterProps> = observer(
               },
             ]}
             reactions={(field) => {
-              field.decorator[1].title = `Align Content : ${field.value || ""}`;
+              (field.decorator as any)[1].title = `Align Content : ${
+                field.value || ""
+              }`;
             }}
             decorator={[InputItems.Item]}
             component={[Radio.Group, { optionType: "button" }]}
@@ -122,7 +126,7 @@ export const FlexStyleSetter: React.FC<IFlexStyleSetterProps> = observer(
               },
             ]}
             reactions={(field) => {
-              field.decorator[1].title = `Justify Content : ${
+              (field.decorator as any)[1].title = `Justify Content : ${
                 field.value || ""
               }`;
             }}
@@ -155,7 +159,9 @@ export const FlexStyleSetter: React.FC<IFlexStyleSetterProps> = observer(
               },
             ]}
             reactions={(field) => {
-              field.decorator[1].title = `Align Items : ${field.value || ""}`;
+              (field.decorator as any)[1].title = `Align Items : ${
+                field.value || ""
+              }`;
             }}
             decorator={[InputItems.Item]}
             component={[Radio.Group, { optionType: "button" }]}

@@ -1,5 +1,5 @@
 import { IconWidget, usePrefix } from "@duang/react";
-import { FormItem } from "@formily/antd";
+import { FormItem as AntdFormItem } from "@formily/antd";
 import { Field as FieldType } from "@formily/core";
 import { Field, observer, useField } from "@formily/react";
 import { Radio } from "antd";
@@ -7,6 +7,8 @@ import cls from "classnames";
 import React from "react";
 import { FlexStyleSetter } from "../FlexStyleSetter";
 import "./styles.less";
+const FormItem = AntdFormItem as Required<typeof AntdFormItem> &
+  typeof AntdFormItem;
 export interface IDisplayStyleSetterProps {
   className?: string;
   style?: React.CSSProperties;
@@ -26,7 +28,7 @@ export const DisplayStyleSetter: React.FC<IDisplayStyleSetterProps> = observer(
           style={props.style}
         >
           <Radio.Group
-            className={prefix + "-radio"}
+            className={`${prefix}-radio`}
             options={[
               {
                 label: <IconWidget infer="DisplayBlock" size={16} />,

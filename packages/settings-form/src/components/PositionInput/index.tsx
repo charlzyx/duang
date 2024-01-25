@@ -19,7 +19,7 @@ export const PositionInput: React.FC<IPositionInputProps> = (props) => {
     }
   }, [props.value]);
   const createCellProps = (type: string) => ({
-    className: cls(prefix + "-cell", { active: current === type }),
+    className: cls(`${prefix}-cell`, { active: current === type }),
     onClick() {
       setCurrent(type);
       props.onChange?.(type);
@@ -27,15 +27,15 @@ export const PositionInput: React.FC<IPositionInputProps> = (props) => {
   });
   return (
     <div className={cls(prefix, props.className)} style={props.style}>
-      <div className={prefix + "-row"}>
+      <div className={`${prefix}-row`}>
         <div {...createCellProps("top")}>┳</div>
       </div>
-      <div className={prefix + "-row"}>
+      <div className={`${prefix}-row`}>
         <div {...createCellProps("left")}>┣</div>
         <div {...createCellProps("center")}>╋</div>
         <div {...createCellProps("right")}>┫</div>
       </div>
-      <div className={prefix + "-row"}>
+      <div className={`${prefix}-row`}>
         <div {...createCellProps("bottom")}>┻</div>
       </div>
     </div>

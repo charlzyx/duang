@@ -7,12 +7,14 @@ export interface ILoadScriptProps {
   base?: string;
 }
 
+const anyGlobal = globalThisPolyfill as any;
+
 export const loadScript = async (props: ILoadScriptProps) => {
   const options: ILoadScriptProps = {
     base: getNpmCDNRegistry(),
     ...props,
   };
-  if (globalThisPolyfill[props.root]) return globalThisPolyfill[options.root];
+  if (anyGlobal[props.root]) return anyGlobal[options.root];
   const path = `${options.base}/${options.package}/${options.entry}`;
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
@@ -20,16 +22,16 @@ export const loadScript = async (props: ILoadScriptProps) => {
     script.async = false;
     script.src = path;
     script.onload = () => {
-      const module = globalThisPolyfill[options.root];
-      globalThisPolyfill["define"] = define;
+      const module = anyGlobal[options.root];
+      anyGlobal["define"] = define;
       resolve(module);
       script.remove();
     };
     script.onerror = (err) => {
       reject(err);
     };
-    const define = globalThisPolyfill["define"];
-    globalThisPolyfill["define"] = undefined;
+    const define = anyGlobal["define"];
+    anyGlobal["define"] = undefined;
     document.body.appendChild(script);
   });
 };

@@ -3,37 +3,38 @@ import { AllLocales } from "../../locales";
 import { AllSchemas } from "../../schemas";
 import { createFieldSchema, createVoidFieldSchema } from "../Field";
 
-export const createArrayBehavior = (name: string) => {
+type Name = keyof typeof AllLocales | keyof typeof AllSchemas | (string & {});
+export const createArrayBehavior = (name: Name) => {
   return createBehavior(
     {
       name,
       extends: ["Field"],
-      selector: (node) => node.props["x-component"] === name,
+      selector: (node) => node.props?.["x-component"] === name,
       designerProps: {
         droppable: true,
-        propsSchema: createFieldSchema(AllSchemas[name]),
+        propsSchema: createFieldSchema((AllSchemas as any)[name]),
       },
-      designerLocales: AllLocales[name],
+      designerLocales: (AllLocales as any)[name],
     },
     {
       name: `${name}.Addition`,
       extends: ["Field"],
-      selector: (node) => node.props["x-component"] === `${name}.Addition`,
+      selector: (node) => node.props?.["x-component"] === `${name}.Addition`,
       designerProps: {
         allowDrop(parent) {
-          return parent.props["x-component"] === name;
+          return parent.props?.["x-component"] === name;
         },
-        propsSchema: createVoidFieldSchema(AllSchemas[name].Addition),
+        propsSchema: createVoidFieldSchema((AllSchemas as any)[name].Addition),
       },
       designerLocales: AllLocales.ArrayAddition,
     },
     {
       name: `${name}.Remove`,
       extends: ["Field"],
-      selector: (node) => node.props["x-component"] === `${name}.Remove`,
+      selector: (node) => node.props?.["x-component"] === `${name}.Remove`,
       designerProps: {
         allowDrop(parent) {
-          return parent.props["x-component"] === name;
+          return parent.props?.["x-component"] === name;
         },
         propsSchema: createVoidFieldSchema(),
       },
@@ -42,10 +43,10 @@ export const createArrayBehavior = (name: string) => {
     {
       name: `${name}.Index`,
       extends: ["Field"],
-      selector: (node) => node.props["x-component"] === `${name}.Index`,
+      selector: (node) => node.props?.["x-component"] === `${name}.Index`,
       designerProps: {
         allowDrop(parent) {
-          return parent.props["x-component"] === name;
+          return parent.props?.["x-component"] === name;
         },
         propsSchema: createVoidFieldSchema(),
       },
@@ -54,10 +55,10 @@ export const createArrayBehavior = (name: string) => {
     {
       name: `${name}.MoveUp`,
       extends: ["Field"],
-      selector: (node) => node.props["x-component"] === `${name}.MoveUp`,
+      selector: (node) => node.props?.["x-component"] === `${name}.MoveUp`,
       designerProps: {
         allowDrop(parent) {
-          return parent.props["x-component"] === name;
+          return parent.props?.["x-component"] === name;
         },
         propsSchema: createVoidFieldSchema(),
       },
@@ -66,10 +67,10 @@ export const createArrayBehavior = (name: string) => {
     {
       name: `${name}.MoveDown`,
       extends: ["Field"],
-      selector: (node) => node.props["x-component"] === `${name}.MoveDown`,
+      selector: (node) => node.props?.["x-component"] === `${name}.MoveDown`,
       designerProps: {
         allowDrop(parent) {
-          return parent.props["x-component"] === "ArrayCards";
+          return parent.props?.["x-component"] === "ArrayCards";
         },
         propsSchema: createVoidFieldSchema(),
       },

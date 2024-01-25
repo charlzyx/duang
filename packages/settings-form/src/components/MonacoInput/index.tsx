@@ -12,7 +12,7 @@ import { format } from "./format";
 import "./styles.less";
 
 export type Monaco = typeof monaco;
-export interface MonacoInputProps extends EditorProps {
+export interface MonacoInputProps extends Omit<EditorProps, "onChange"> {
   helpLink?: string | boolean;
   helpCode?: string;
   helpCodeViewWidth?: number | string;
@@ -38,13 +38,13 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
   const [loaded, setLoaded] = useState(false);
   const theme = useTheme();
   const valueRef = useRef("");
-  const validateRef = useRef(null);
-  const submitRef = useRef(null);
+  const validateRef = useRef<number | null>(null);
+  const submitRef = useRef<number | null>(null);
   const declarationRef = useRef<string[]>([]);
-  const extraLibRef = useRef<monaco.IDisposable>(null);
+  const extraLibRef = useRef<monaco.IDisposable>(null!);
   const monacoRef = useRef<Monaco>();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
-  const computedLanguage = useRef<string>(language || defaultLanguage);
+  const computedLanguage = useRef<string>(language || defaultLanguage!);
   const realLanguage = useRef<string>("");
   const unmountedRef = useRef(false);
   const changedRef = useRef(false);
@@ -74,8 +74,8 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
       extraLibRef.current.dispose();
     }
     extraLibRef.current =
-      monacoRef.current.languages.typescript.typescriptDefaults.addExtraLib(
-        props.extraLib,
+      monacoRef.current!.languages.typescript.typescriptDefaults.addExtraLib(
+        props.extraLib!,
         `${uidRef.current}.d.ts`,
       );
   };
@@ -109,7 +109,7 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
             <TextWidget token="SettingComponents.MonacoInput.helpDocument" />
           }
         >
-          <div className={prefix + "-helper"}>
+          <div className={`${prefix}-helper`}>
             <a target="_blank" href={href} rel="noreferrer">
               <IconWidget infer="Help" />
             </a>
@@ -128,7 +128,7 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
     onMount?.(editor, monaco);
     const model = editor.getModel();
     const currentValue = editor.getValue();
-    model["getDesignerLanguage"] = () => computedLanguage.current;
+    (model as any).getDesignerLanguage = () => computedLanguage.current;
     if (currentValue) {
       format(computedLanguage.current, currentValue)
         .then((content) => {
@@ -150,7 +150,7 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
   };
 
   const submit = () => {
-    clearTimeout(submitRef.current);
+    clearTimeout(submitRef.current!);
     submitRef.current = setTimeout(() => {
       onChange?.(valueRef.current);
     }, 1000);
@@ -158,7 +158,7 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
 
   const validate = () => {
     if (realLanguage.current === "typescript") {
-      clearTimeout(validateRef.current);
+      clearTimeout(validateRef.current!);
       validateRef.current = setTimeout(() => {
         try {
           if (valueRef.current) {
@@ -173,27 +173,27 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
               });
             }
           }
-          monacoRef.current.editor.setModelMarkers(
-            editorRef.current.getModel(),
+          monacoRef.current!.editor.setModelMarkers(
+            editorRef.current!.getModel()!,
             computedLanguage.current,
             [],
           );
-          declarationRef.current = editorRef.current.deltaDecorations(
+          declarationRef.current = editorRef.current!.deltaDecorations(
             declarationRef.current,
             [
               {
-                range: new monacoRef.current.Range(1, 1, 1, 1),
+                range: new monacoRef.current!.Range(1, 1, 1, 1),
                 options: {},
               },
             ],
           );
           submit();
-        } catch (e) {
-          declarationRef.current = editorRef.current.deltaDecorations(
+        } catch (e: any) {
+          declarationRef.current = editorRef.current!.deltaDecorations(
             declarationRef.current,
             [
               {
-                range: new monacoRef.current.Range(
+                range: new monacoRef.current!.Range(
                   e.loc.line,
                   e.loc.column,
                   e.loc.line,
@@ -206,8 +206,8 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
               },
             ],
           );
-          monacoRef.current.editor.setModelMarkers(
-            editorRef.current.getModel(),
+          monacoRef.current!.editor.setModelMarkers(
+            editorRef.current!.getModel()!,
             computedLanguage.current,
             [
               {
@@ -225,11 +225,11 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
       }, 240);
     } else {
       submit();
-      declarationRef.current = editorRef.current.deltaDecorations(
+      declarationRef.current = editorRef.current!.deltaDecorations(
         declarationRef.current,
         [
           {
-            range: new monacoRef.current.Range(1, 1, 1, 1),
+            range: new monacoRef.current!.Range(1, 1, 1, 1),
             options: {},
           },
         ],
@@ -242,7 +242,7 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
     valueRef.current = value;
     validate();
   };
-  computedLanguage.current = language || defaultLanguage;
+  computedLanguage.current = language || defaultLanguage!;
   realLanguage.current = /(?:javascript|typescript)/gi.test(
     computedLanguage.current,
   )
@@ -253,7 +253,7 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
     if (!helpCode) return null;
     return (
       <div
-        className={prefix + "-view"}
+        className={`${prefix}-view`}
         style={{ width: helpCodeViewWidth || "50%" }}
       >
         <Editor
@@ -295,7 +295,7 @@ export const MonacoInput: React.FC<MonacoInputProps> & {
       style={{ width, height }}
     >
       {renderHelper()}
-      <div className={prefix + "-view"}>
+      <div className={`${prefix}-view`}>
         <Editor
           {...props}
           theme={theme === "dark" ? "monokai" : "chrome-devtools"}

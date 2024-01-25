@@ -43,12 +43,12 @@ export const useLocales = (node: TreeNode) => {
       field.description = description;
     }
     if (tooltip) {
-      field.decorator[1] = field.decorator[1] || [];
-      field.decorator[1].tooltip = tooltip;
+      (field.decorator as any)[1] = (field.decorator as any)[1] || [];
+      (field.decorator as any)[1].tooltip = tooltip;
     }
     if (placeholder) {
-      field.component[1] = field.component[1] || [];
-      field.component[1].placeholder = placeholder;
+      (field.component as any)[1] = (field.component as any)[1] || [];
+      (field.component as any)[1].placeholder = placeholder;
     }
     if (!isVoidField(field)) {
       if (dataSource?.length) {

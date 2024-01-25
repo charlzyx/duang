@@ -24,7 +24,7 @@ export interface IInputItemProps {
   title?: React.ReactNode;
 }
 
-const InputItemsContext = React.createContext<IInputItemsContext>(null);
+const InputItemsContext = React.createContext<IInputItemsContext>(null!);
 
 export const InputItems: React.FC<IInputItemsProps> & {
   Item: React.FC<IInputItemProps>;
@@ -54,12 +54,12 @@ InputItems.Item = (props) => {
       style={{ width: props.width || ctx.width, ...props.style }}
     >
       {props.icon && (
-        <div className={prefix + "-icon"}>
+        <div className={`${prefix}-icon`}>
           <IconWidget infer={props.icon} size={16} />
         </div>
       )}
-      {props.title && <div className={prefix + "-title"}>{props.title}</div>}
-      <div className={prefix + "-controller"}>{props.children}</div>
+      {props.title && <div className={`${prefix}-title`}>{props.title}</div>}
+      <div className={`${prefix}-controller`}>{props.children}</div>
     </div>
   );
 };

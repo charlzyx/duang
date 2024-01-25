@@ -10,15 +10,15 @@ export interface ISelection {
 }
 
 export class Selection {
-  operation: Operation;
+  operation!: Operation;
   selected: string[] = [];
   indexes: Record<string, boolean> = {};
 
   constructor(props?: ISelection) {
-    if (props.selected) {
+    if (props?.selected) {
       this.selected = props.selected;
     }
-    if (props.operation) {
+    if (props?.operation) {
       this.operation = props.operation;
     }
     this.makeObservable();
@@ -72,10 +72,13 @@ export class Selection {
 
   batchSelect(ids: string[] | TreeNode[]) {
     this.selected = this.mapIds(ids);
-    this.indexes = this.selected.reduce((buf, id) => {
-      buf[id] = true;
-      return buf;
-    }, {});
+    this.indexes = this.selected.reduce(
+      (buf, id) => {
+        buf[id] = true;
+        return buf;
+      },
+      {} as typeof this.indexes,
+    );
     this.trigger(SelectNodeEvent);
   }
 
@@ -85,16 +88,15 @@ export class Selection {
   }
 
   get selectedNodes() {
-    return this.selected.map((id) => this.operation.tree.findById(id));
+    return this.selected.map((id) => this.operation.tree.findById(id)!);
   }
 
   get first() {
-    if (this.selected && this.selected.length) return this.selected[0];
+    if (this.selected?.length) return this.selected[0];
   }
 
   get last() {
-    if (this.selected && this.selected.length)
-      return this.selected[this.selected.length - 1];
+    if (this.selected?.length) return this.selected[this.selected.length - 1];
   }
 
   get length() {
@@ -158,7 +160,7 @@ export class Selection {
     this.trigger(UnSelectNodeEvent);
   }
 
-  has(...ids: string[] | TreeNode[]) {
+  has(...ids: string[] | TreeNode[]): boolean {
     return this.mapIds(ids).some((id) => {
       if (isStr(id)) {
         return this.indexes[id];

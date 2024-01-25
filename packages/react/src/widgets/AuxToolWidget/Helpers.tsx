@@ -27,11 +27,11 @@ export const Helpers: React.FC<IHelpersProps> = ({ node, nodeRect }) => {
   const prefix = usePrefix("aux-helpers");
   const viewport = useViewport();
   const unmountRef = useRef(false);
-  const ref = useRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState("top-right");
 
   useLayoutEffect(() => {
-    let request = null;
+    let request: number | null = null;
 
     const getYInViewport = (nodeRect: DOMRect, helpersRect: DOMRect) => {
       if (nodeRect.top - viewport.scrollY > helpersRect.height) {
@@ -70,9 +70,10 @@ export const Helpers: React.FC<IHelpersProps> = ({ node, nodeRect }) => {
       if (!helpersRect || !nodeRect) return;
       if (unmountRef.current) return;
       setPosition(
-        getYInViewport(nodeRect, helpersRect) +
-          "-" +
-          getXInViewport(nodeRect, helpersRect),
+        `${getYInViewport(nodeRect, helpersRect)}-${getXInViewport(
+          nodeRect,
+          helpersRect,
+        )}`,
       );
     };
 
@@ -88,7 +89,7 @@ export const Helpers: React.FC<IHelpersProps> = ({ node, nodeRect }) => {
         viewport.isScrollTop,
       ],
       () => {
-        clearTimeout(request);
+        clearTimeout(request!);
         request = setTimeout(update, HELPER_DEBOUNCE_TIMEOUT);
       },
     );
@@ -103,7 +104,7 @@ export const Helpers: React.FC<IHelpersProps> = ({ node, nodeRect }) => {
       })}
       ref={ref}
     >
-      <div className={cls(prefix + "-content")}>
+      <div className={cls(`${prefix}-content`)}>
         <Selector node={node} />
         {node?.allowClone() === false ? null : <Copy node={node} />}
         {node?.allowDrag() === false ? null : <DragHandler node={node} />}

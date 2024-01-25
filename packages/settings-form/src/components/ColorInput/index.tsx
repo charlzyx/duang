@@ -10,7 +10,7 @@ export interface IColorInputProps {
 }
 
 export const ColorInput: React.FC<IColorInputProps> = (props) => {
-  const container = useRef<HTMLDivElement>();
+  const container = useRef<HTMLDivElement>(null);
   const prefix = usePrefix("color-input");
   const color = props.value as string;
   return (
@@ -26,18 +26,18 @@ export const ColorInput: React.FC<IColorInputProps> = (props) => {
             autoAdjustOverflow
             trigger="click"
             overlayInnerStyle={{ padding: 0 }}
-            getPopupContainer={() => container.current}
+            getPopupContainer={() => container.current!}
             content={
               <SketchPicker
                 color={color}
-                onChange={({ rgb }) => {
+                onChange={({ rgb }: any) => {
                   props.onChange?.(`rgba(${rgb.r},${rgb.g},${rgb.b},${rgb.a})`);
                 }}
               />
             }
           >
             <div
-              className={prefix + "-color-tips"}
+              className={`${prefix}-color-tips`}
               style={{
                 backgroundColor: color,
               }}

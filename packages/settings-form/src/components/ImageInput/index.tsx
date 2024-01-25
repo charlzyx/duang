@@ -22,7 +22,7 @@ export const ImageInput: React.FC<ImageInputProps> = ({
       <Input
         {...props}
         onChange={(e) => {
-          props.onChange?.(e?.target?.["value"]);
+          props.onChange?.(e?.target?.value);
         }}
         prefix={
           <Upload

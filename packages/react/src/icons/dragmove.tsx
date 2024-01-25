@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const DragMove = (
   <svg viewBox="0 0 48 48">
@@ -7,4 +7,4 @@ export const DragMove = (
       transform="translate(24.969675, 25.019030) rotate(-45.000000) translate(-24.969675, -25.019030) "
     ></path>
   </svg>
-)
+);
